@@ -63,6 +63,7 @@ mkdir -p "$HOME"/.config
 ln -sfn "$PWD"/.config/alacritty "$HOME/.config/alacritty"
 ln -sfn "$PWD"/.config/mpv "$HOME/.config/mpv"
 ln -sfn "$PWD"/.config/nvim "$HOME/.config/nvim"
+ln -sfn "$PWD"/.config/tmux "$HOME/.config/tmux"
 ln -sfn "$PWD"/.config/starship.toml "$HOME/.config/starship.toml"
 
 # Set macOS preferences (sane defaults)
