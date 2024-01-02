@@ -1,4 +1,7 @@
-import = ["/Users/djamseed/.config/alacritty/keybindings.toml"]
+import = [
+    "~/.config/alacritty/themes/catppuccin-mocha.toml",
+    "~/.config/alacritty/keybindings.toml"
+]
 
 live_config_reload = true
 
