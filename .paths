@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+brew_path=$(brew --prefix)
+
+# Add `Homebrew` binaries to the PATH
+export PATH="$brew_path/bin:$PATH"
+export PATH="$brew_path/sbin:$PATH"
+
+# Golang
+export GOROOT=$brew_path/opt/go/libexec
+export GOPATH=$HOME/.go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOPATH
+export PATH=$PATH:$GOROOT/bin
+export PATH=$PATH:$GOBIN
+
+# cURL
+export PATH="$brew_path/opt/curl/bin:$PATH"
+
+# Update path for gnu make & sed on darwin
+export PATH="$brew_path/opt/make/libexec/gnubin:$PATH"
+export PATH="$brew_path/opt/gnu-sed/libexec/gnubin:$PATH"
+
+export MANPATH="$brew_path/opt/make/libexec/gnuman:$MANPATH"
+export MANPATH="$brew_path/opt/gnu-sed/libexec/gnuman:$MANPATH"
+
+# Docker
+export PATH="/Applications/Docker.app/Contents/Resources/bin/:$PATH"
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+
+# Rust
+export PATH="$HOME/.cargo/bin:$PATH"

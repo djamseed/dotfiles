@@ -1,0 +1,56 @@
+import = ["/Users/djamseed/.config/alacritty/keybindings.toml"]
+
+live_config_reload = true
+
+[cursor.style]
+blinking = "On"
+shape = "Block"
+
+[font]
+size = 12.5
+
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+
+[font.italic]
+family = "JetBrainsMono Nerd Font"
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[mouse]
+hide_when_typing = true
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[selection]
+save_to_clipboard = false
+semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
+
+[shell]
+program = "/usr/local/bin/bash"
+args = ["-l", "-c", "tmux a -t 0 || tmux"]
+
+[window]
+decorations = "full"
+dynamic_padding = true
+dynamic_title = true
+opacity = 0.95
+option_as_alt = "OnlyLeft"
+startup_mode = "Windowed"
+title = "Alacritty"
+
+[window.class]
+general = "Alacritty"
+instance = "Alacritty"
+
+[window.dimensions]
+columns = 130
+lines = 40
+
+[window.padding]
+x = 5
+y = 5

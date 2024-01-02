@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+
+# Bash wrappers for docker run commands
+
+dcleanup() {
+    local containers
+    local volumes
+    local images
+
+    mapfile -t containers < <(docker ps -aq 2>/dev/null)
+    docker rm "${containers[@]}" 2>/dev/null
+
+    mapfile -t volumes < <(docker ps --filter status=exited -q 2>/dev/null)
+    docker rm -v "${volumes[@]}" 2>/dev/null
+
+    mapfile -t images < <(docker images --filter dangling=true -q 2>/dev/null)
+    docker rmi "${images[@]}" 2>/dev/null
+}
+
+del_stopped() {
+    local name=$1
+    local state
+    state=$(docker inspect --format '{{.State.Running}}' "$name" 2>/dev/null)
+
+    if [[ "$state" == 'false' ]]; then
+        docker rm "$name"
+    fi
+}
+
+rmctr() {
+    # shellcheck disable=SC2068
+    docker rm -f $@ 2>/dev/null || true
+}
+
+relies_on() {
+    for container in "$@"; do
+        local state
+        state=$(docker inspect --format '{{.State.Running}}' "$container" 2>/dev/null)
+
+        if [[ "$state" == 'false' ]] || [[ "$state" == '' ]]; then
+            echo "$container is not running, starting it for you."
+            $container
+        fi
+    done
+}
+
+dps() {
+    docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}\t{{.ID}}'
+}
+
+cockroachdb() {
+    del_stopped cockroachdb
+    docker volume create cockroach_data
+
+    docker run -d \
+        --restart always \
+        -v "$HOME"/.cache/cockroach_data:/cockroach/cockroach-data \
+        -p 26257:26257 \
+        -p 8080:8080 \
+        --name cockroachdb \
+        cockroachdb/cockroach start-single-node --insecure
+}
+
+mongodb() {
+    del_stopped mongodb
+
+    docker run -d \
+        --restart always \
+        -e MONGO_INITDB_ROOT_USERNAME=root \
+        -e MONGO_INITDB_ROOT_PASSWORD=admin \
+        -v "$HOME"/.cache/mongodb_data:/data/db \
+        -p 27017:27017 \
+        mongo
+}
+
+prometheus() {
+    del_stopped prometheus
+    docker volume create prometheus_data
+
+    docker run -d \
+        --restart always \
+        -v "$HOME"/.cache/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+        -v prometheus_data:/prometheus \
+        -p 9090:9090 \
+        -config.file=/etc/prometheus/prometheus.yml \
+        -storage.local.path=/prometheus \
+        -storage.local.memory-chunks=10000 \
+        --name prometheus \
+        prom/prometheus
+}
+
+redis() {
+    del_stopped redis
+    docker volume create redis_data
+
+    docker run -d \
+        --restart always \
+        -v "$HOME"/.cache/redis_data:/data \
+        -p 6379:6379 \
+        --name redis \
+        redis-server --save 60 --requirepass admin --loglevel warning
+}
