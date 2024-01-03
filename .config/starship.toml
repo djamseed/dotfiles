@@ -41,6 +41,9 @@ symbol = ' '
 [memory_usage]
 symbol = ' '
 
+[os]
+disabled = false
+
 [os.symbols]
 Alpine = ' '
 Arch = ' '
