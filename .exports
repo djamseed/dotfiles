@@ -28,7 +28,7 @@ export HISTTIMEFORMAT="[%F %T] "
 export HISTIGNORE='ls:cd:cd -:pwd:exit:ls:history:date:* --help:jrnl * -h:pony:pony add *:pony update *:pony save *:pony ls:pony ls *'
 
 # Set the location of your HISTFILE
-export HISTFILE=$HOME/.bash_history
+export HISTFILE=$HOME/.cache/.bash_history
 
 # Make Neovim the default editor
 EDITOR='nvim'
