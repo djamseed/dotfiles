@@ -15,21 +15,6 @@ export LC_ALL='en_US.UTF-8'
 # Default block size for ls, df, du
 export BLOCKSIZE=10k
 
-# Sets the size to "unlimited"
-export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups:ignorespace
-
-# Ignore whitespace and duplicates. Erase duplicates.
-export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}erasedups
-export HISTFILESIZE=1000000000
-export HISTSIZE=1000000
-export HISTTIMEFORMAT="[%F %T] "
-
-## Make some commands not show up in history
-export HISTIGNORE='ls:cd:cd -:pwd:exit:ls:history:date:* --help:jrnl * -h:pony:pony add *:pony update *:pony save *:pony ls:pony ls *'
-
-# Set the location of your HISTFILE
-export HISTFILE=$HOME/.cache/.bash_history
-
 # Make Neovim the default editor
 EDITOR='nvim'
 export EDITOR
