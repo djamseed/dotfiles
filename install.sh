@@ -40,7 +40,7 @@ brew bundle
 
 # Change the shell to bash
 if ! grep -q "$(which bash)" /etc/shells; then
-    sudo bash -c 'echo "$(which bash)" >> /etc/shells'
+    sudo sh -c 'echo "$(which bash)" >> /etc/shells'
 fi
 
 chsh -s "$(which bash)"
