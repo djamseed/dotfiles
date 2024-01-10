@@ -1,35 +1,43 @@
 #!/usr/bin/env bash
 
-brew_path=$(brew --prefix)
+HOMEBREW_PREFIX=/usr/local
+
+if ! grep -q "$(which bash)" /etc/shells; then
+    sudo sh -c 'echo "$(which bash)" >> /etc/shells'
+fi
 
 # Add `Homebrew` binaries to the PATH
-export PATH="$brew_path/bin:$PATH"
-export PATH="$brew_path/sbin:$PATH"
+if ! grep -q /usr/local/bin /etc/paths; then
+    export PATH="$HOMEBREW_PREFIX/bin:$PATH"
+fi
 
-# Golang
-export GOROOT=$brew_path/opt/go/libexec
+if ! grep -q /usr/local/sbin /etc/paths; then
+    export PATH="$HOMEBREW_PREFIX/sbin:$PATH"
+fi
+
+# Add Go to the PATH
+export GOROOT=$HOMEBREW_PREFIX/opt/go/libexec
 export GOPATH=$HOME/.go
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOPATH
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$GOBIN
 
-# cURL
-export PATH="$brew_path/opt/curl/bin:$PATH"
+# Addd Homebrew-installed curl to the PATH
+export PATH="$HOMEBREW_PREFIX/opt/curl/bin:$PATH"
 
-# Update path for gnu make & sed on darwin
-export PATH="$brew_path/opt/make/libexec/gnubin:$PATH"
-export PATH="$brew_path/opt/gnu-sed/libexec/gnubin:$PATH"
+# Update PATH for GNU Make & Sed
+export PATH="$HOMEBREW_PREFIX/opt/make/libexec/gnubin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnubin:$PATH"
+export MANPATH="$HOMEBREW_PREFIX/opt/make/libexec/gnuman:$MANPATH"
+export MANPATH="$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnuman:$MANPATH"
 
-export MANPATH="$brew_path/opt/make/libexec/gnuman:$MANPATH"
-export MANPATH="$brew_path/opt/gnu-sed/libexec/gnuman:$MANPATH"
-
-# Docker
+# Add docker to the PATH
 export PATH="/Applications/Docker.app/Contents/Resources/bin/:$PATH"
 
-# pyenv
+# Add pyenv to the PATH
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 
-# Rust
+# Add Rust tools to the PATH
 export PATH="$HOME/.cargo/bin:$PATH"
