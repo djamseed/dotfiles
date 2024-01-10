@@ -222,7 +222,7 @@ getcertnames() {
 
 # Query Wikipedia via console over DNS
 wiki() {
-    dig +short txt "$*".wp.dg.cx
+    dig +short txt "$*".wp.dg.cx | sd --string-mode 's/"//g'
 }
 
 # Logout from OS X via the Terminal
@@ -248,20 +248,6 @@ httpserver() {
     # Set the default Content-Type to `text/plain` instead of `application/octet-stream`
     # And serve everything as UTF-8 (although not technically correct, this doesn’t break anything for binary files)
     python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port"
-}
-
-# Generate SSH RSA keys
-sshkeygen() {
-    echo 'What'\''s the name of the Key (no spaces please) ?'
-    read -r name
-    echo 'What'\''s the email associated with it? '
-    read -r email
-
-    ssh-keygen -t ed25519 -N "" -f ~/.ssh/"$name" -C "$email"
-    ssh-add ~/.ssh/"$name"
-    pbcopy <~/.ssh/"$name".pub
-
-    echo 'SSH Key copied in your clipboard'
 }
 
 # `tree` display a tree structure with hidden files and color enabled, ignoring
