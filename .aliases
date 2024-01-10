@@ -2,13 +2,10 @@
 
 # shellcheck disable=SC2139
 
-# Remove all previous defined aliases
+# Remove all previous environment defined aliases
 unalias -a
 
-# Allow aliases to be sudo'ed
-alias sudo='sudo '
-
-# Generic aliases
+# General aliases
 alias c='clear'
 alias cat='bat'
 alias console='tee -a ~/console.log'
@@ -37,9 +34,8 @@ alias ps='procs'
 alias r='exec ${SHELL} -l'
 alias rg='rg --hidden --smart-case -g "!.git"'
 alias rmds='fd -g '*.DS_Store' . -x rm -v'
-alias tar='tar -cvf'
+alias sudo='sudo '
 alias top='htop'
-alias untar='tar -xvf'
 alias week='date +%V'
 alias vim='nvim'
 alias zap='rm -i'
@@ -52,26 +48,6 @@ alias .3='cd ../../../'          # Go back 3 directory levels
 alias .4='cd ../../../../'       # Go back 4 directory levels
 alias .5='cd ../../../../../'    # Go back 5 directory levels
 alias .6='cd ../../../../../../' # Go back 6 directory levels
-
-# Clean up LaunchServices to remove duplicates in the “Open With” menu
-alias cleanupls='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder'
-
-# Empty the trash on all mounted volumes and the main HDD
-# Also, clear Apple’s System Logs to improve shell startup speed
-alias emptytrash='sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; speedup; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* "delete from LSQuarantineEvent"'
-
-# Speed-up Terminal load time by clearing system logs
-alias speedup='sudo rm -rf /private/var/log/asl/*'
-
-# Upgrade `Homebrew` packages
-alias brewupdate='brew update && brew upgrade && brew cleanup; brew cu --all && brew cu --cleanup && brew doctor'
-
-# Get macOS software update
-alias update='sudo softwareupdate -i -a'
-
-# Pipe public & private keys to the clipboard
-alias pubkey='pbcopy < ~/.ssh/id_ed25519.pub | echo "=> Public key copied to clipboard."'
-alias prikey='pbcopy < ~/.ssh/id_ed25519 | echo "=> Private key copied to clipboard."'
 
 # Networking
 alias flushdns='sudo dscacheutil -flushcache && killall -HUP mDNSResponder'                  # flushDNS:     Flush out the DNS Cache
@@ -90,3 +66,19 @@ alias pubip='curl -s checkip.dyndns.org | sed -e "s/.*Current IP Address: //" -e
 # View HTTP traffic
 alias httpdump='sudo tcpdump -i en1 -n -s 0 -w - | rg -a -o -P "Host: .*|GET /.*"'
 alias sniff='sudo rg -i -t "^(GET|POST) " -d en1 "tcp and port 80"'
+
+# Clean up LaunchServices to remove duplicates in the “Open With” menu
+alias cleanupls='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder'
+
+# Empty the trash on all mounted volumes and the main HDD
+# Also, clear Apple’s System Logs to improve shell startup speed
+alias emptytrash='sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; speedup; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* "delete from LSQuarantineEvent"'
+
+# Speed-up Terminal load time by clearing system logs
+alias speedup='sudo rm -rf /private/var/log/asl/*'
+
+# Upgrade `Homebrew` packages
+alias brewupdate='brew update && brew upgrade && brew cleanup; brew cu --all && brew cu --cleanup && brew doctor'
+
+# Get macOS software update
+alias sysupdate='sudo softwareupdate -i -a'

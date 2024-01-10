@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Load .bashrc, which loads: ~/.{paths,exports,aliases,functions,extra,dockerfuncs}
+# Source .bashrc
 if [[ -r "${HOME}/.bashrc" ]]; then
     # shellcheck source=/dev/null
     source "${HOME}/.bashrc"
