@@ -8,6 +8,7 @@ case $- in
 *) return ;;
 esac
 
+# Source dotfiles
 for file in ~/.{paths,exports,aliases,functions,extra,dockerfuncs}; do
     if [[ -r "$file" ]] && [[ -f "$file" ]]; then
         # shellcheck source=/dev/null
@@ -43,6 +44,13 @@ export SHELL_SESSION_HISTORY=0
 #  - no_empty_cmd_completion - do not TAB expand empty lines
 shopt -s autocd cdspell direxpand dirspell globstar histappend histverify \
     nocaseglob no_empty_cmd_completion
+
+# Prevent file overwrite on stdout redirection.
+# Use `>|` to force redirection to an existing file.
+set -o noclobber
+
+# Set preferred umask.
+umask 002
 
 # Enable vi mode
 set -o vi
