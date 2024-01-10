@@ -53,6 +53,13 @@ find . -type f -name ".*" ! -name ".editorconfig" ! -name ".gitattributes" ! -na
     done
 ' sh {} +
 
+# Create symlinks from the bin directory to /usr/local/bin
+for f in "$PW"D/bin/*; do
+    if [ -f "$f" ]; then
+        ln -sfn "$PWD/bin/$f" "/usr/local/bin/$f"
+    fi
+done
+
 # Ignore changes in the .gitconfig file
 git update-index --skip-worktree "$PWD"/.gitconfig
 
