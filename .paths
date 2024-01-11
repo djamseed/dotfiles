@@ -2,10 +2,6 @@
 
 HOMEBREW_PREFIX=/usr/local
 
-if ! grep -q "$(which bash)" /etc/shells; then
-    sudo sh -c 'echo "$(which bash)" >> /etc/shells'
-fi
-
 # Add `Homebrew` binaries to the PATH
 if ! grep -q /usr/local/bin /etc/paths; then
     export PATH="$HOMEBREW_PREFIX/bin:$PATH"
