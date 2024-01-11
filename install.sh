@@ -17,10 +17,13 @@ done 2>/dev/null &
 echo ''
 
 # Check for Xcode command line tools and install if we don't have it
-if ! test "$(which xcode-select)"; then
-    echo 'Installing command line tools for Xcode...'
-    xcode-select --install
-fi
+echo 'Installing Xcode command line tools ...'
+check="$(xcode-select --install 2>&1)"
+str='xcode-select: note: install requested for command line developer tools'
+while [[ $check == "$str" ]]; do
+    check="$(xcode-select --install 2>&1)"
+    sleep 1
+done
 
 # Check for Homebrew and install if we don't have it
 if ! test "$(which brew)"; then
