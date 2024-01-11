@@ -67,6 +67,7 @@ git update-index --skip-worktree "$PWD"/.gitconfig
 mkdir -p "$HOME"/.config
 
 # Create symlinks from the .config folder to ~/.config
+ln -sfn "$PWD"/.config/1Password "$HOME/.config/1Password"
 ln -sfn "$PWD"/.config/alacritty "$HOME/.config/alacritty"
 ln -sfn "$PWD"/.config/mpv "$HOME/.config/mpv"
 ln -sfn "$PWD"/.config/nvim "$HOME/.config/nvim"
