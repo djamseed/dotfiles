@@ -9,7 +9,7 @@ unalias -a
 alias c='clear'
 alias cat='bat'
 alias console='tee -a ~/console.log'
-alias cp='cp -i'
+alias cp='cp -iv'
 alias cwd='pwd | tr -d "\r\n" | pbcopy'
 alias df='duf'
 alias du='dust -n 30'
