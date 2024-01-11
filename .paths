@@ -3,11 +3,11 @@
 HOMEBREW_PREFIX=/usr/local
 
 # Add `Homebrew` binaries to the PATH
-if ! grep -q /usr/local/bin /etc/paths; then
+if ! grep -q "$HOMEBREW_PREFIX"/bin /etc/paths; then
     export PATH="$HOMEBREW_PREFIX/bin:$PATH"
 fi
 
-if ! grep -q /usr/local/sbin /etc/paths; then
+if ! grep -q "$HOMEBREW_PREFIX"/sbin /etc/paths; then
     export PATH="$HOMEBREW_PREFIX/sbin:$PATH"
 fi
 
