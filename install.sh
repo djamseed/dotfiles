@@ -57,7 +57,7 @@ find . -type f -name ".*" ! -name ".editorconfig" ! -name ".gitattributes" ! -na
 ' sh {} +
 
 # Create symlinks from the bin directory to /usr/local/bin
-for f in "$PW"D/bin/*; do
+for f in "$PWD"/bin/*; do
     if [ -f "$f" ]; then
         ln -sfn "$PWD/bin/$f" "/usr/local/bin/$f"
     fi
