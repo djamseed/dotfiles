@@ -222,7 +222,7 @@ getcertnames() {
 
 # Query Wikipedia via console over DNS
 wiki() {
-    dig +short txt "$*".wp.dg.cx | sd --string-mode 's/"//g'
+    dig +short txt "$*".wp.dg.cx | sd --string-mode '"' ''
 }
 
 # Logout from OS X via the Terminal
