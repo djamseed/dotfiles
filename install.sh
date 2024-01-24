@@ -81,7 +81,7 @@ ln -sfn "$PWD"/.config/tmux "$HOME/.config/tmux"
 ln -sfn "$PWD"/.config/starship.toml "$HOME/.config/starship.toml"
 
 # Set macOS preferences (sane defaults)
-source macos.sh
+bash macos.sh
 
 printf '\u2728\e[1;33m Installation completed! \u2728 \e[m\n'
 read -r '?Press any key to reboot your computer...: '
