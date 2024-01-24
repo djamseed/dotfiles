@@ -17,16 +17,19 @@ done 2>/dev/null &
 echo ''
 
 # Check for Xcode command line tools and install if we don't have it
-echo 'Installing Xcode command line tools ...'
-check="$(xcode-select --install 2>&1)"
-str='xcode-select: note: install requested for command line developer tools'
-while [[ $check == "$str" ]]; do
-    check="$(xcode-select --install 2>&1)"
-    sleep 1
-done
+if ! command -v xcode-select &>/dev/null; then
+    echo 'Installing Xcode command line tools...'
+    xcode-select --install
+    echo "Waiting for command line tools installation for Xcode to complete..."
+    until command -v xcode-select &>/dev/null; do
+        sleep 1
+    done
+else
+    echo "Command Line Tools for Xcode are already installed."
+fi
 
 # Check for Homebrew and install if we don't have it
-if ! test "$(which brew)"; then
+if ! command -v brew &>/dev/null; then
     echo 'Installing Homebrew...'
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(/usr/local/bin/brew shellenv)"
