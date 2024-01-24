@@ -20,12 +20,12 @@ echo ''
 if ! command -v xcode-select &>/dev/null; then
     echo 'Installing Xcode command line tools...'
     xcode-select --install
-    echo "Waiting for command line tools installation for Xcode to complete..."
+    echo 'Waiting for command line tools installation for Xcode to complete...'
     until command -v xcode-select &>/dev/null; do
         sleep 1
     done
 else
-    echo "Command Line Tools for Xcode are already installed."
+    echo 'Command Line Tools for Xcode are already installed.'
 fi
 
 # Check for Homebrew and install if we don't have it
