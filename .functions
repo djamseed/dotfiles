@@ -58,11 +58,12 @@ fzf_change_directory() {
 # https://bluz71.github.io/2018/11/26/fuzzy-finding-in-bash-with-fzf.html
 fzf_kill() {
     local pids
-    pids=$(ps -f -u "$USER" | sed 1d | fzf | awk '{print $3}')
+    pids=$(procs "$USER" | sed 1d | fzf | awk '{print $3}')
     if [[ -n "$pids" ]]; then
         echo "$pids" | xargs kill -9 "$@"
     fi
 }
+
 # Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
 targz() {
     local archive_name="${1%/}.tar"
