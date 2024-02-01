@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 port=$1
-[[ -z $port ]] && 8080
+[[ -z $port ]] && port=8080
 
-python -m http.server $port
+python -m http.server "$port"
