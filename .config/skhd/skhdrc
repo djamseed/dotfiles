@@ -14,7 +14,7 @@ cmd + alt - h : yabai -m window --swap west
 cmd + shift - r : yabai -m space --rotate 90
 
 # Toggle window fullscreen zoom
-cmd + shift - f : yabai -m window --toggle zoom-fullscreen
+# cmd + shift - f : yabai -m window --toggle zoom-fullscreen
 
 # Toggle padding and gap
 cmd - g : yabai -m space --toggle padding; yabai -m space --toggle gap
@@ -26,7 +26,7 @@ cmd + alt - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
 cmd + shift - e : yabai -m window --toggle split
 
 # Balance size of windows
-shift + alt - 0 : yabai -m space --balance
+cmd + shift - 0 : yabai -m space --balance
 
 # Move window and focus desktop
 cmd + shift - 1 : yabai -m window --space 1; yabai -m space --focus 1
