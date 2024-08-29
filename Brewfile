@@ -2,6 +2,7 @@ tap 'buo/cask-upgrade'
 tap 'homebrew/bundle'
 tap 'homebrew/cask-fonts'
 tap 'koekeishiya/formulae'
+tap 'nikitabobko/tap/formulae'
 
 cask_args appdir: '/Applications'
 
@@ -50,6 +51,7 @@ brew 'xh'
 brew 'yabai'
 
 cask '1password'
+cask 'aerospace'
 cask 'alacritty'
 cask 'arc'
 cask 'cleanmymac'
