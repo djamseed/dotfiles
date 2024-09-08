@@ -38,10 +38,11 @@ program = "/usr/local/bin/bash"
 args = ["-l", "-c", "tmux a -t main || tmux new -t main"]
 
 [window]
+blur = true
 decorations = "Buttonless"
 dynamic_padding = true
 dynamic_title = true
-opacity = 0.85
+opacity = 0.80
 option_as_alt = "OnlyLeft"
 startup_mode = "Windowed"
 title = "Alacritty"
@@ -56,4 +57,4 @@ lines = 40
 
 [window.padding]
 x = 5
-y = 5
+y = 0
