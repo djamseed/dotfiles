@@ -206,8 +206,10 @@ run = 'move-node-to-workspace 3'
 
 # Music apps
 
+[[on-window-detected]]
 if.app-id = 'com.apple.Music'
 run = 'move-node-to-workspace 5'
 
+[[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = 'move-node-to-workspace 5'
