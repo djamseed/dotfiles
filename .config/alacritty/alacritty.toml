@@ -1,8 +1,8 @@
+[general]
 import = [
     "~/.config/alacritty/themes/catppuccin/catppuccin-mocha.toml",
     "~/.config/alacritty/keybindings.toml"
 ]
-
 live_config_reload = true
 
 [cursor.style]
@@ -33,7 +33,7 @@ multiplier = 3
 save_to_clipboard = false
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
-[shell]
+[terminal.shell]
 program = "/usr/local/bin/bash"
 args = ["-l", "-c", "tmux a -t main || tmux new -t main"]
 
@@ -58,3 +58,4 @@ lines = 40
 [window.padding]
 x = 5
 y = 0
+
