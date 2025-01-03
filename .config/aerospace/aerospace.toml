@@ -199,6 +199,7 @@ run = 'layout floating'
 if.app-id = 'md.obsidian'
 run = 'move-node-to-workspace 3'
 
+[[on-window-detected]]
 if.app-id = 'com.apple.Notes'
 run = 'move-node-to-workspace 3'
 
