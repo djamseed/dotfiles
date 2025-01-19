@@ -55,6 +55,7 @@ cask '1password'
 cask 'aerospace'
 cask 'alacritty'
 cask 'arc'
+cask 'betterdisplay'
 cask 'cleanmymac'
 cask 'discord'
 cask 'docker'
@@ -73,5 +74,6 @@ cask 'transmission'
 cask 'whatsapp'
 
 mas 'Amphetamine', id: 937984704
+mas 'Hidden Bar', id: 452453066
 mas 'iA Writer', id: 775737590
 mas 'Kindle', id: 302584613
