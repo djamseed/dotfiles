@@ -1,7 +1,7 @@
 # Theme
 theme = rose-pine
-background-blur-radius = 20
-background-opacity = 0.90
+# background-blur-radius = 20
+# background-opacity = 0.90
 bold-is-bright = true
 
 # Fonts

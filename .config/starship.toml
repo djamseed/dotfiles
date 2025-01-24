@@ -1,67 +1,65 @@
 # Get editor completions based on the config schema
 '$schema' = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
-add_newline = true
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$cmd_duration\
+$line_break\
+$python\
+$golang\
+$dotnet\
+$zig\
+$character"""
 
-# Timeout for starship to execute command (ms)
-command_timeout = 1000
+[directory]
+style = "blue"
 
-[aws]
-disabled = true
-
-[buf]
-symbol = ' '
-
-[c]
-symbol = ' '
-
-# Replace the '❯' symbol in the prompt with '➜'
 [character]
-success_symbol = '[❯❯❯](bold green)'
-error_symbol = '[✗](bold red)'
-
-[docker_context]
-symbol = ' '
-only_with_files = true
+success_symbol = "[❯](purple)"
+error_symbol = "[❯](red)"
+vimcmd_symbol = "[❮](green)"
 
 [git_branch]
-symbol = ' '
+format = "[$branch]($style)"
+style = "bright-black"
 
-[golang]
-symbol = ' '
+[git_status]
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+style = "cyan"
+conflicted = "​"
+untracked = "​"
+modified = "​"
+staged = "​"
+renamed = "​"
+deleted = "​"
+stashed = "≡"
 
-[hostname]
-format = '[$ssh_symbol](bold blue) on [$hostname](bold red) '
-ssh_only = true
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
 
-[lua]
-symbol = ' '
-
-[memory_usage]
-symbol = ' '
-
-[os]
-disabled = false
-
-[os.symbols]
-Alpine = ' '
-Arch = ' '
-Debian = ' '
-Fedora = ' '
-Linux = ' '
-Macos = ' '
+[cmd_duration]
+format = "[$duration]($style) "
+style = "yellow"
 
 [python]
-symbol = ' '
+format = "[$virtualenv]($style) "
+style = "bright-black"
 
-[status]
-disabled = false
-style = 'red'
-symbol = ' '
-not_executable_symbol = '🚫'
-not_found_symbol = ' '
-sigint_symbol = ' '
-signal_symbol = ' '
-format = '[\[ $symbol$common_meaning$signal_name$maybe_int \]]($style) '
-map_symbol = true
+[golang]
+format = "[$version]($style) "
+style = "bold cyan"
+
+[dotnet]
+format = "[$version]($style) "
+style = "bold blue"
+heuristic = true
+
+[zig]
+format = "[$version]($style) "
+style = "bold yellow"
