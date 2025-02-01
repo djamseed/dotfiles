@@ -1,0 +1,34 @@
+#
+# Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
+#
+
+local archive_name="${1%/}.tar"
+local exclude_pattern="--exclude=.DS_Store"
+local size cmd
+
+# Create the tar archive
+tar "${archive_name}" "${exclude_pattern}" "${@}" || return 1
+
+# Determine the size of the tar archive
+size=$(stat -f"%z" "${archive_name}" 2>/dev/null || stat -c"%s" "${archive_name}" 2>/dev/null)
+
+# Choose compression tool based on size and availability
+if ((size < 52428800)) && command -v zopfli 2>/dev/null; then
+    cmd="zopfli"
+elif command -v pigz 2>/dev/null; then
+    cmd="pigz"
+else
+    cmd="gzip"
+fi
+
+# Compress the tar archive
+echo "Compressing .tar ($((size / 1000)) kB) using \`${cmd}\`..."
+"${cmd}" -v "${archive_name}" || return 1
+
+# Remove the uncompressed tar archive
+[ -f "${archive_name}" ] && rm "${archive_name}"
+
+# Determine the size of the compressed archive
+zipped_size=$(stat -f"%z" "${archive_name}.gz" 2>/dev/null || stat -c"%s" "${archive_name}.gz" 2>/dev/null)
+
+echo "${archive_name}.gz ($((zipped_size / 1000)) kB) created successfully."

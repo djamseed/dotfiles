@@ -1,0 +1,5 @@
+#
+# Finds `.DS_Store` files under the current directory and deletes them.
+#
+
+(($+commands[fd])) && \fd -H -I ".DS_Store" -X rm -v || find . -name ".DS_Store" -delete

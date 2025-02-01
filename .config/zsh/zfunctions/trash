@@ -1,0 +1,5 @@
+#
+# Moves a file to the macOS trash
+#
+
+command mv "$@" ~/.Trash

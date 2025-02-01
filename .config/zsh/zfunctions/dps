@@ -1,0 +1,5 @@
+#
+# List all docker containers
+#
+
+(($+commands[docker])) && docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}\t{{.ID}}'

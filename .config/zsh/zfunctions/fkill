@@ -1,0 +1,12 @@
+#
+# Fuzzy find a process or group of processes, then SIGKILL them.
+# https://bluz71.github.io/2018/11/26/fuzzy-finding-in-bash-with-fzf.html
+#
+
+(($+commands[procs])) && (($+commands[fzf])) && {
+    local pids
+    pids=$(procs $USER | fzf --multi | awk '{print $1}')
+    if [[ -n "$pids" ]]; then
+        echo "$pids" | xargs kill -9 "$@"
+    fi
+}

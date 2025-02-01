@@ -59,4 +59,6 @@ tags
 # Ignore tmux plugins
 .config/tmux/plugins/**
 
+# Ignore git user configuration
+.config/git/local
 # End of https://www.toptal.com/developers/gitignore/api/macos,vim

@@ -1,56 +1,40 @@
-#!/usr/bin/env bash
-
-# shellcheck disable=SC2139
-
 # Remove all previous environment defined aliases
 unalias -a
 
-# General aliases
-alias c='clear'
-alias cat='bat'
-alias console='tee -a ~/console.log'
+# Better defaults
+alias c=clear
 alias cp='cp -iv'
 alias cwd='pwd | tr -d "\r\n" | pbcopy'
-alias df='duf'
-alias du='dust -n 30'
-alias fcd='fzf_change_directory'
-alias fd='fd -H'
-alias fe='fzf_find_edit'
-alias finder='open -a Finder ./'
-alias fkill='fzf_kill'
-alias h='history'
-alias la='eza -abghHl --group-directories-first'
-alias less='less -R'
 alias locale='locale -a | rg UTF-8'
-alias lr='eza -T -L 5 --git-ignore'
-alias lsd='eza -laDh'
 alias mkdir='mkdir -pv'
 alias mv='mv -i'
-alias path='echo -e ${PATH//:/\\n}'
-alias ping='gping'
 alias ports='sudo lsof -i -P -n | rg LISTEN'
-alias preview='open -a Preview'
-alias ps='procs'
 alias r='exec ${SHELL} -l'
-alias rg='rg --hidden --smart-case -g "!.git"'
-alias rmds='fd -g '*.DS_Store' . -x rm -v'
 alias sudo='sudo '
-alias top='htop'
+alias top=htop
 alias week='date +%V'
-alias vim='nvim'
 alias zap='rm -i'
-
-# Quicker navigations
-alias ~='cd ~'
-alias ..='cd ../'                # Go back 1 directory level
-alias ...='cd ../../'            # Go back 2 directory levels
-alias .3='cd ../../../'          # Go back 3 directory levels
-alias .4='cd ../../../../'       # Go back 4 directory levels
-alias .5='cd ../../../../../'    # Go back 5 directory levels
-alias .6='cd ../../../../../../' # Go back 6 directory levels
+(($+commands[bat])) && alias cat=bat
+(($+commands[duf])) && alias df=duf
+(($+commands[dust])) && alias du='dust -n 30 -X .git'
+(($+commands[fd])) && alias fd='fd -H -E .git'
+(($+commands[eza])) && {
+    alias la='eza -ABghHl --icons --group-directories-first'
+    alias lr='eza -T -L 5 --git-ignore --icons'
+    alias lsd='eza -lADh'
+    alias lsg='eza -lA --git --icons'
+}
+(($+commands[gls])) && alias ls='gls -lF --group-directories-first --color=auto'
+(($+commands[gping])) && alias ping=gping
+(($+commands[procs])) && alias ps=procs
+(($+commands[rg])) && alias rg='rg -. -S -g "!.git"'
+(($+commands[nvim])) && {
+    alias vi=nvim
+    alias vim=nvim
+}
 
 # Networking
-alias flushdns='sudo dscacheutil -flushcache && killall -HUP mDNSResponder'                  # flushDNS:     Flush out the DNS Cache
+alias flushdns='sudo killall -HUP mDNSResponder && dscacheutil -flushcache'                  # flushDNS:     Flush out the DNS Cache
 alias ipInfo0='ipconfig getpacket en0'                                                       # ipInfo0:      Get info on connections for en0
 alias ipInfo1='ipconfig getpacket en1'                                                       # ipInfo1:      Get info on connections for en1
 alias localip='ipconfig getifaddr en0'                                                       # localip:      Display the local address
@@ -60,25 +44,20 @@ alias lsockU='sudo /usr/sbin/lsof -nP | rg UDP'                                 
 alias netCons='lsof -i'                                                                      # netCons:      Show all open TCP/IP sockets
 alias nic="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"                 # nic:          Show active network interfaces
 alias op='sudo lsof -i -P'                                                                   # op:           List of open ports
-alias openports='sudo lsof -i | rg LISTEN'                                                   # openPorts:    All listening connections
 alias pubip='curl -s checkip.dyndns.org | sed -e "s/.*Current IP Address: //" -e "s/<.*$//"' # myip:         Public facing IP Address
 
 # View HTTP traffic
-alias httpdump='sudo tcpdump -i en1 -n -s 0 -w - | rg -a -o -P "Host: .*|GET /.*"'
+alias httpdump='sudo tcpdump -i en0 -n -s 0 -w - | rg -a -o -P "Host: .*|GET /.*"'
 alias sniff='sudo rg -i -t "^(GET|POST) " -d en1 "tcp and port 80"'
 
 # Clean up LaunchServices to remove duplicates in the “Open With” menu
 alias cleanupls='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder'
 
 # Empty the trash on all mounted volumes and the main HDD
-# Also, clear Apple’s System Logs to improve shell startup speed
-alias emptytrash='sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; speedup; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* "delete from LSQuarantineEvent"'
-
-# Speed-up Terminal load time by clearing system logs
-alias speedup='sudo rm -rf /private/var/log/asl/*'
+alias emptytrash='sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* "delete from LSQuarantineEvent"'
 
 # Upgrade `Homebrew` packages
-alias brewupdate='brew update && brew upgrade && brew cleanup; brew cu --all && brew cu --cleanup && brew doctor'
+alias brewupdate='brew update && brew upgrade && brew upgrade --cask && brew cleanup'
 
 # Get macOS software update
 alias sysupdate='sudo softwareupdate -i -a'
