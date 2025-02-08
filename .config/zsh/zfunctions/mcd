@@ -1,0 +1,5 @@
+#
+# Creates a directory and changes to it
+#
+
+mkdir -p $1 && cd $1 || exit

@@ -1,17 +1,15 @@
 # dotfiles
 
-Setup for my personal dotfiles and [Homebrew](https://brew.sh) packages. Works on \*nix, optimized for macOS.
-
 ![banner](banner.png)
 
-My setup includes:
+This repository hosts my personal dotfiles for macOS, using the following combo:
 
--   [Alacritty](https://alacritty.org)
--   [Bash](https://www.gnu.org/software/bash/)
--   [Tmux](https://github.com/tmux/tmux/wiki)
--   [Starship](https://starship.rs/)
--   [Neovim](https://neovim.io/)
--   [Jetbrains Mono Nerd Font](https://www.programmingfonts.org/#jetbrainsmono)
+- [Aerospace](https://github.com/nikitabobko/AeroSpace)
+- [Ghostty](https://ghostty.org)
+- [Zsh](https://zsh.org/)
+- [Powerlevel10k](https://github.com/romkatv/powerlevel10k)
+- [tmux](https://github.com/tmux/tmux)
+- [Neovim](https://neovim.io)
 
 ## Install
 
@@ -27,24 +25,18 @@ The install script will also run `macos.sh`, which provide sensible defaults whe
 
 ## Customizing
 
-Use an `.extra` file to save things (env vars, commands, etc...) you don't want to commit to a public repo.
-It will be sourced if present. This can look something like that:
+Update ~/.config/git/local/user with your email and name. It should look something like this:
 
 ```sh
-###
-### Git credentials
-###
+[user]
+    email = john@example.com
+    name = John Doe
+```
 
-GIT_AUTHOR_NAME="Your Name"
-GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
-git config --global user.name "$GIT_AUTHOR_NAME"
+Use a .privaterc file to save things (env vars, commands, etc...) you don't want to commit to a public repo. It will be sourced if present. This can look something like that:
 
-GIT_AUTHOR_EMAIL="email@you.com"
-GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
-git config --global user.email "$GIT_AUTHOR_EMAIL"
-
-GH_USER="nickname"
-git config --global github.user "$GH_USER"
+```sh
+export SOME_API_KEY="f799a61172c44960a2ad2b297ed7475d"
 ```
 
 ## Misc

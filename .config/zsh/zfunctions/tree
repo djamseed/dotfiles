@@ -1,0 +1,7 @@
+#
+# Display a tree structure with hidden files and color enabled, ignoring
+# the `.git` directory, listing directories first. The output gets piped into
+# `bat` that preserves colors and line numbers.
+#
+
+(($+commands[eza])) && eza --all --tree --color always --ignore-glob '.git|node_modules' --group-directories-first | bat

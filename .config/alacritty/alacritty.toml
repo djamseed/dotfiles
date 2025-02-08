@@ -1,6 +1,6 @@
 [general]
 import = [
-    "~/.config/alacritty/themes/catppuccin/catppuccin-mocha.toml",
+    "~/.config/alacritty/themes/rose-pine/rose-pine.toml",
     "~/.config/alacritty/keybindings.toml"
 ]
 live_config_reload = true
@@ -10,7 +10,7 @@ blinking = "On"
 shape = "Block"
 
 [font]
-size = 12.5
+size = 14
 
 [font.bold]
 family = "JetBrainsMono Nerd Font"
@@ -34,7 +34,7 @@ save_to_clipboard = false
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
 [terminal.shell]
-program = "/usr/local/bin/bash"
+program = "/bin/zsh"
 args = ["-l", "-c", "tmux a -t main || tmux new -t main"]
 
 [window]
@@ -42,7 +42,7 @@ blur = true
 decorations = "Buttonless"
 dynamic_padding = true
 dynamic_title = true
-opacity = 0.80
+opacity = 0.90
 option_as_alt = "OnlyLeft"
 startup_mode = "Windowed"
 title = "Alacritty"
@@ -58,4 +58,3 @@ lines = 40
 [window.padding]
 x = 5
 y = 0
-

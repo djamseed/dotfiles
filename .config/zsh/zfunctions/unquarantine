@@ -1,0 +1,8 @@
+#
+# Removes a downloaded app or file from the macOS quarantine
+#
+
+local attribute
+for attribute in com.apple.metadata:kMDItemDownloadedDate com.apple.metadata:kMDItemWhereFroms com.apple.quarantine; do
+    xattr -r -d "${attribute}" "$@"
+done
