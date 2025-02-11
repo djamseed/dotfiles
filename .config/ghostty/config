@@ -12,7 +12,7 @@ font-feature = -liga
 font-size = 13
 
 # Window
-confirm-close-surface = true
+confirm-close-surface = false
 macos-titlebar-style = hidden
 shell-integration-features = no-cursor, sudo
 window-padding-balance = true
