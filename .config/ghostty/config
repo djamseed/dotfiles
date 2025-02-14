@@ -14,6 +14,7 @@ font-size = 13
 # Window
 confirm-close-surface = false
 macos-titlebar-style = hidden
+quit-after-last-window-closed = true
 shell-integration-features = no-cursor, sudo
 window-padding-balance = true
 window-padding-x = 10
