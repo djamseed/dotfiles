@@ -34,7 +34,7 @@ macos-option-as-alt = true
 scrollback-limit = 10000
 
 # Startup
-command = /bin/zsh -l -c 'tmux a -t main || tmux new -s main'
+command = "$SHELL" -l -c 'tmux a -t main || tmux new -s main'
 
 # Keybindings
 keybind = super+shift+r=reload_config
