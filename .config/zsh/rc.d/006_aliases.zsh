@@ -59,7 +59,7 @@ alias cleanupls='/System/Library/Frameworks/CoreServices.framework/Frameworks/La
 alias emptytrash='sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* "delete from LSQuarantineEvent"'
 
 # Upgrade `Homebrew` packages
-alias brewupdate='brew update && brew upgrade && brew upgrade --cask && brew cleanup'
+alias brewupdate='brew update && brew upgrade && brew upgrade --cask --greedy && brew cleanup'
 
 # Get macOS software update
 alias sysupdate='sudo softwareupdate -i -a'
