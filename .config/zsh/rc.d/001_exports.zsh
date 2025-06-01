@@ -21,7 +21,7 @@ export PAGER=less
 (($+commands[bat])) && export MANPAGER='col -bx | bat -l man -p' || export MANPAGER=less
 
 # Ensure Homebrew-installed binaries for curl take precedence
-if (( $+commands[brew] )); then
+if (($+commands[brew])); then
     LIBCURL_CFLAGS="-L$HOMEBREW_PREFIX/opt/curl/lib"
     LIBCURL_LIBS="-I$HOMEBREW_PREFIX/opt/curl/include"
     export LIBCURL_CFLAGS LIBCURL_LIBS

@@ -18,3 +18,8 @@ export ZDOTDIR=$XDG_CONFIG_HOME/zsh
 
 # Disable global Zsh configuration
 unsetopt GLOBAL_RCS
+
+# Setup Homebrew's environment variables
+(($+commands[brew])) || [[ -x /opt/homebrew/bin/brew ]] && \
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+
