@@ -1,6 +1,6 @@
 # Enable Powerlevel10k prompt
 
-source /usr/local/share/powerlevel10k/powerlevel10k.zsh-theme
+source $HOMEBREW_PREFIX/share/powerlevel10k/powerlevel10k.zsh-theme
 
 # Temporarily change options.
 'builtin' 'local' '-a' 'p10k_config_opts'
