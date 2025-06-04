@@ -1,5 +1,3 @@
-tap 'homebrew/bundle'
-
 cask_args appdir: '/Applications'
 
 brew 'ag'
