@@ -1,7 +1,8 @@
 # Theme
 theme = rose-pine
-background-blur-radius = 20
-background-opacity = 0.90
+# background = #141415
+background-blur-radius = 40
+background-opacity = 0.85
 bold-is-bright = true
 
 # Fonts
@@ -9,7 +10,7 @@ font-family = JetBrainsMono Nerd Font
 font-feature = -calt
 font-feature = -clig
 font-feature = -liga
-font-size = 13
+font-size = 14
 
 # Window
 confirm-close-surface = false
@@ -21,7 +22,7 @@ window-padding-x = 10
 window-padding-y = 10
 
 # Cursor
-cursor-color = white
+cursor-color = #cdcdcd
 cursor-style-blink = false
 
 # Mouse
