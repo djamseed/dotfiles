@@ -36,7 +36,7 @@ export CLICOLOR=1
 export LSCOLORS=GxFxCxDxCxegedabagaced
 
 # Enable color support for GNU `ls`
-(($+commands[gls])) && (($+commands[vivid])) && export LS_COLORS=$(vivid generate rose-pine)
+(($+commands[gls])) && (($+commands[vivid])) && export LS_COLORS=$(vivid generate rose-pine-dawn)
 
 # Reconfigure applications to use the XDG Base Directory structure
 export CARGO_HOME=$XDG_DATA_HOME/cargo
