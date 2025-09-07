@@ -6,7 +6,7 @@ background-opacity = 0.90
 bold-is-bright = true
 
 # Fonts
-font-family = JetBrainsMono Nerd Font
+font-family = FiraCode Nerd Font
 font-feature = -calt
 font-feature = -clig
 font-feature = -liga
