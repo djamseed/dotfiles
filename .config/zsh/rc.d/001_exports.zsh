@@ -51,7 +51,7 @@ export NUGET_PACKAGES=$XDG_DATA_HOME/NugetPackages
 export OMNISHARPHOME=$XDG_CONFIG_HOME/omnisharp
 export PYENV_ROOT=$XDG_DATA_HOME/pyenv
 export RUSTUP_HOME=$XDG_DATA_HOME/rustup
-export TLDR_CACHE_DIR=$XDG_CACHE_HOME/tldr
+export TLRC_CONFIG=$XDG_CONFIG_HOME/tldr/config.toml
 
 # .NET environment variables
 export DOTNET_ROOT=/usr/local/share/dotnet
