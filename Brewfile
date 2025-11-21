@@ -51,7 +51,6 @@ brew 'zsh-autosuggestions'
 brew 'zsh-fast-syntax-highlighting'
 
 cask '1password'
-cask 'alacritty'
 cask 'appcleaner'
 cask 'betterdisplay'
 cask 'discord'
