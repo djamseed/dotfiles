@@ -33,9 +33,6 @@ multiplier = 3
 save_to_clipboard = false
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
-[terminal.shell]
-program = "/bin/zsh"
-args = ["-l", "-c", "tmux a -t main || tmux new -t main"]
 
 [window]
 blur = true
