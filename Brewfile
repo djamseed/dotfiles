@@ -1,6 +1,7 @@
 cask_args appdir: '/Applications'
 
 brew 'ag'
+brew 'anomalyco/tap/opencode'
 brew 'bash'
 brew 'bat'
 brew 'btop'
