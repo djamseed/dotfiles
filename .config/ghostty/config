@@ -1,41 +1,77 @@
-# Theme
-theme = Rose Pine
-# background = #141415
-background-blur-radius = 40
-background-opacity = 0.90
-bold-is-bright = true
+# -- general -------------------------------------------------------------------
 
-# Fonts
-font-family = FiraCode Nerd Font
-font-feature = -calt
-font-feature = -clig
-font-feature = -liga
-font-size = 14
-
-# Window
+desktop-notifications = false
 confirm-close-surface = false
-macos-titlebar-style = hidden
 quit-after-last-window-closed = true
+bell-features = no-system
+shell-integration = zsh
 shell-integration-features = no-cursor, sudo
-window-padding-balance = true
-window-padding-x = 10
-window-padding-y = 10
-
-# Cursor
-cursor-color = #cdcdcd
-cursor-style-blink = false
-
-# Mouse
-mouse-hide-while-typing = true
-
-# Misc
-copy-on-select = true
 link-url = true
-macos-option-as-alt = true
+mouse-hide-while-typing = true
 scrollback-limit = 10000
 
-# Startup
+# -- shell ---------------------------------------------------------------------
+
 command = "$SHELL" -l -c 'tmux new-session -A -s main'
 
-# Keybindings
+# -- appearance ----------------------------------------------------------------
+
+theme = Rose Pine
+background = #141415
+background-opacity = 0.9
+background-blur = 40
+font-family = FiraCode Nerd Font
+font-size = 14
+font-feature = -calt -clig -liga
+bold-color = bright
+
+# -- cursor --------------------------------------------------------------------
+
+cursor-color = #cdcdcd
+cursor-text = #232136
+cursor-style-blink = false
+
+# -- selection -----------------------------------------------------------------
+
+selection-background = #44415a
+selection-foreground = #e0def4
+copy-on-select = clipboard
+
+# -- clipboard -----------------------------------------------------------------
+
+clipboard-read = allow
+
+# -- padding -------------------------------------------------------------------
+
+window-padding-x = 10
+window-padding-y = 10
+window-padding-balance = true
+
+# -- color palette -------------------------------------------------------------
+
+palette = 0=#393552
+palette = 1=#eb6f92
+palette = 2=#3e8fb0
+palette = 3=#f6c177
+palette = 4=#9ccfd8
+palette = 5=#c4a7e7
+palette = 6=#ea9a97
+palette = 7=#e0def4
+palette = 8=#6e6a86
+palette = 9=#eb6f92
+palette = 10=#3e8fb0
+palette = 11=#f6c177
+palette = 12=#9ccfd8
+palette = 13=#c4a7e7
+palette = 14=#ea9a97
+palette = 15=#e0def4
+
+# -- keybindings ----------------------------------------------------------------
+
 keybind = super+shift+r=reload_config
+
+# -- macOS specific ------------------------------------------------------------
+
+macos-titlebar-style = hidden
+macos-option-as-alt = true
+macos-icon = xray
