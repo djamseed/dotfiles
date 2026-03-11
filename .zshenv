@@ -2,11 +2,6 @@
 # .zshenv - Zsh environment file, loaded for all shell sessions.
 #
 
-# Locale
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export LC_CTYPE=en_US.UTF-8
-
 # XDG Base Directory Specification
 export XDG_CACHE_HOME=$HOME/.cache
 export XDG_CONFIG_HOME=$HOME/.config
@@ -20,6 +15,13 @@ export ZDOTDIR=$XDG_CONFIG_HOME/zsh
 unsetopt GLOBAL_RCS
 
 # Setup Homebrew's environment variables
-(($+commands[brew])) || [[ -x /opt/homebrew/bin/brew ]] && \
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+_brew_env_cache=$XDG_CACHE_HOME/brew_shellenv.zsh
+{ [[ ! -f $_brew_env_cache ]] || [[ /opt/homebrew/bin/brew -nt $_brew_env_cache ]]; } && /opt/homebrew/bin/brew shellenv >| $_brew_env_cache
+source $_brew_env_cache
+unset _brew_env_cache
 
+# Load environment variables from env.d
+for file in $XDG_CONFIG_HOME/zsh/env.d/*.zsh(N); do
+    source $file
+done
+unset file

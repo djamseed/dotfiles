@@ -10,7 +10,7 @@ esac
 [ -z "$PS1" ] && return
 
 # Lazy-load (autoload) Zsh function files from a directory.
-ZFUNCDIR=$ZDOTDIR/zfunctions
+ZFUNCDIR=$ZDOTDIR/zfunc
 fpath=($ZFUNCDIR $fpath)
 autoload -Uz $ZFUNCDIR/*(.:t)
 

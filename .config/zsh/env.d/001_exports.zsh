@@ -1,5 +1,7 @@
-# Make `nvim` the default editor
-(($+commands[nvim])) && export EDITOR=nvim VISUAL=nvim || export EDITOR=vim VISUAL=vim
+# Locale
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
 
 # Better experience for `less`
 #    -F: Exit if contents fit on one screen.
@@ -30,13 +32,6 @@ fi
 # Avoid issues with `gpg` as installed via Homebrew.
 # https://stackoverflow.com/a/42265848/96656
 export GPG_TTY=$TTY
-
-# Enable color support for BSD `ls`
-export CLICOLOR=1
-export LSCOLORS=GxFxCxDxCxegedabagaced
-
-# Enable color support for GNU `ls`
-(($+commands[gls])) && (($+commands[vivid])) && export LS_COLORS=$(vivid generate rose-pine-dawn)
 
 # Reconfigure applications to use the XDG Base Directory structure
 export CARGO_HOME=$XDG_DATA_HOME/cargo
