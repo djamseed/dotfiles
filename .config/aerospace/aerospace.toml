@@ -184,20 +184,6 @@ run = 'move-node-to-workspace 1'
 if.app-id = 'com.mitchellh.ghostty'
 run = 'move-node-to-workspace 2'
 
-## Chat apps
-[[on-window-detected]]
-if.app-id = 'com.apple.MobileSMS'
-run = 'move-node-to-workspace 4'
-
-[[on-window-detected]]
-if.app-id = 'com.hnc.Discord'
-run = 'move-node-to-workspace 4'
-
-## Floaters
-[[on-window-detected]]
-if.app-id = 'com.1password.1password'
-run = 'layout floating'
-
 ## Note apps
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
@@ -207,6 +193,15 @@ run = 'move-node-to-workspace 3'
 if.app-id = 'com.apple.Notes'
 run = 'move-node-to-workspace 3'
 
+## Chat apps
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.hnc.Discord'
+run = 'move-node-to-workspace 4'
+
 # Music apps
 [[on-window-detected]]
 if.app-id = 'com.apple.Music'
@@ -215,3 +210,8 @@ run = 'move-node-to-workspace 5'
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = 'move-node-to-workspace 5'
+
+## Floaters
+[[on-window-detected]]
+if.app-id = 'com.1password.1password'
+run = 'layout floating'
