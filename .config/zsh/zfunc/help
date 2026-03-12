@@ -1,0 +1,5 @@
+#
+# Colorize help messages with bat
+#
+
+(($+commands[bat]))  && "$@" --help 2>&1 | bat --plain --language=help
