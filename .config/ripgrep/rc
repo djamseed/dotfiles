@@ -1,0 +1,24 @@
+# Ignore files larger than 10M
+--max-filesize=10M
+
+# Prevent ripgrep to print really long lines and show a preview
+--max-columns=150
+--max-columns-preview
+
+# Search hidden files / directories (e.g. dotfiles) by default
+--hidden
+
+# Using glob patterns to include/exclude files or folders
+--glob=!.git/*
+
+# Set the colors.
+--colors=line:fg:yellow
+--colors=line:style:bold
+--colors=path:fg:green
+--colors=path:style:bold
+--colors=match:fg:black
+--colors=match:bg:yellow
+--colors=match:style:nobold
+
+# Search case insentitively if pattern is all lowercase otherwise search case sensitively
+--smart-case

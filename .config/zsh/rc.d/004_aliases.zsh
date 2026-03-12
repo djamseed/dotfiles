@@ -25,7 +25,6 @@ alias zap='rm -i'
 (($+commands[gping])) && alias ping=gping
 (($+commands[procs])) && alias ps=procs
 (($+commands[rg])) && {
-    alias rg='rg -. -S -g "!.git"'
     alias locale='locale -a | rg UTF-8'
     alias ports='sudo lsof -i -P -n | rg LISTEN'
 
