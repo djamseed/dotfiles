@@ -1,57 +1,57 @@
+# -- general -------------------------------------------------------------------
+
 [general]
 import = [
-    "~/.config/alacritty/themes/rose-pine/rose-pine.toml",
-    "~/.config/alacritty/keybindings.toml"
+    "~/.config/alacritty/keybindings.toml",
+    "~/.config/alacritty/themes/rose-pine/rose-pine-moon.toml",
 ]
-live_config_reload = true
 
-[cursor.style]
-blinking = "On"
-shape = "Block"
+# -- window -------------------------------------------------------------------
 
-[font]
-size = 14
+[window]
+dimensions = { columns = 130, lines = 40 }
+padding = { x= 5, y = 5 }
+dynamic_padding = true
+decorations = "Buttonless"
+dynamic_title = true
+opacity = 0.80
+blur = true
+startup_mode = "Windowed"
+class = { general = "Alacritty", instance = "Alacritty" }
+option_as_alt = "OnlyLeft"
 
-[font.bold]
-family = "FiraCode Nerd Font"
-
-[font.italic]
-family = "FiraCode Nerd Font"
-
-[font.normal]
-family = "FiraCode Nerd Font"
-style = "Regular"
-
-[mouse]
-hide_when_typing = true
+# -- scrolling -------------------------------------------------------------------
 
 [scrolling]
 history = 10000
 multiplier = 3
 
+# -- font -------------------------------------------------------------------
+
+[font]
+normal = { family = "FiraCode Nerd Font", style = "Regular" }
+bold = { family = "FiraCode Nerd Font", style = "Bold" }
+italic = { family = "FiraCode Nerd Font", style = "Italic" }
+size = 14
+
+# -- selection -------------------------------------------------------------------
+
 [selection]
-save_to_clipboard = false
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
+save_to_clipboard = false
 
+# -- cursor -------------------------------------------------------------------
 
-[window]
-blur = true
-decorations = "Buttonless"
-dynamic_padding = true
-dynamic_title = true
-opacity = 0.90
-option_as_alt = "OnlyLeft"
-startup_mode = "Windowed"
-title = "Alacritty"
+[cursor]
+style = { shape = "Block", blinking = "On" }
+blink_interval = 500
+blink_timeout = 30
 
-[window.class]
-general = "Alacritty"
-instance = "Alacritty"
+# -- terminal -------------------------------------------------------------------
+[terminal]
+shell = { program = "/bin/zsh", args = ["-l", "-c", 'tmux new-session -A -s main'] }
 
-[window.dimensions]
-columns = 130
-lines = 40
+# -- mouse -------------------------------------------------------------------
 
-[window.padding]
-x = 5
-y = 5
+[mouse]
+hide_when_typing = true
