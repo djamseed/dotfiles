@@ -12,7 +12,7 @@ alias sudo='sudo '
 alias week='date +%V'
 alias zap='rm -i'
 (($+commands[bat])) && alias cat=bat
-(($+commands[duf])) && alias df=duf
+(($+commands[duf])) && alias df='duf --sort size'
 (($+commands[dust])) && alias du='dust -n 30 -X .git'
 (($+commands[fd])) && alias fd='fd -H -E .git'
 (($+commands[eza])) && {
