@@ -1,52 +1,24 @@
 [include]
     path = local/user
 [alias]
-	# List aliases
 	aliases = config --get-regexp alias
-    # Amend the currently staged files to the latest commit
 	amend = commit --amend --reuse-message=HEAD
-    # Clone a repository including all submodules
-	c = clone --recursive
-	# Commit all changes
-	ca = !git add -A && git commit -av
-    # List contributors with number of commits
-	contributors = shortlog --summary --numbered
-    # Credit an author on the latest commit
-	credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
-	# Show the diff between the latest commit and the current state
-	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
-	# `git di $number` shows the diff between the state `$number` revisions ago and the current state
-	di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
-    # Remove branches that have already been merged with main
-	# a.k.a. ‘delete merged’
-	dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
-    # Find branches containing commit
-	fb = "!f() { git branch -a --contains $1; }; f"
-	# Find commits by source code
-	fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
-    # Find tags containing commit
-	ft = "!f() { git describe --always --contains $1; }; f"
-	# Find commits by commit message
-	fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
-	# Switch to a branch, creating it if necessary
-	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
-  	# Color graph log view
-  	graph = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
-	# View abbreviated SHA, description, and history graph of the latest 20 commits
-	l = log --pretty=oneline -n 20 --graph --abbrev-commit
-	# Pull in remote changes for the current repository and all its submodules
-	p = !"git pull; git submodule foreach git pull origin main"
-    # Interactive rebase with the given number of latest commits
-	reb = "!r() { git rebase -i HEAD~$1; }; r"
-	# Remove the old tag with this name and tag the latest commit with it.
-	retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r"
-    # View the current working tree status using the short format
-	s = status -s
-
-	# Show verbose output about tags, branches or remotes
 	branches = branch -a
+	c = clone --recursive
+	ca = !git add -A && git commit -av # commit all changes
+	contributors = shortlog --summary --numbered
+	credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f" # credit an author on the latest commit
+	dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d" # remove merged branches
+	fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f" # switch to branch, creating it if necessary
+	l = log --pretty=oneline -n 20 --graph --abbrev-commit # show latest 20 commits
+	p = !"git pull; git submodule foreach git pull origin main" # pull in remote changes for the current repo and all its submodules
+	reb = "!r() { git rebase -i HEAD~$1; }; r" # interactive rebase with given number of latest commits
 	remotes = remote -v
+	retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r" # remove old tag with given name and tag the latest commit with it
+	s = status -s
 	tags = tag -l
+  	graph = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
 
 	# Merge GitHub pull request on top of the current branch or,
 	# if a branch name is specified, on top of the specified branch
@@ -65,16 +37,10 @@
 	}; f"
 
 [apply]
-	# Detect whitespace errors when applying a patch
-	whitespace = fix
-
-[commit]
-	template = ~/.gitmessage
+	whitespace = fix # detect whitespace errors when applying a patch
 
 [color]
-	# Use colors in Git commands that are capable of colored output when
-	# outputting to the terminal. (This is the default setting in Git ≥ 1.8.4.)
-	ui = auto
+	ui = auto # use colors in git commands
 
 [color "branch"]
 	current = yellow reverse
@@ -83,9 +49,9 @@
 
 [color "diff"]
 	meta = yellow bold
-	frag = magenta bold # line info
-	old = red # deletions
-	new = green # additions
+	frag = magenta bold
+	old = red
+	new = green
 
 [color "status"]
 	added = yellow
@@ -93,30 +59,16 @@
 	untracked = cyan
 
 [commit]
-	template = ~/.gitmessage
+	template = ~/.config/git/commit-template
 
 [core]
-	# Use custom `.gitignore` and `.gitattributes`
-	attributesfile = ~/.gitattributes
-	excludesfile = ~/.gitignore
-
-    pager = delta --dark
-
-    # Prevent showing files whose names contain non-ASCII symbols as unversioned.
-	# http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+	attributesfile = ~/.config/git/attributes
+    editor = nvim
+	excludesfile = ~/.config/git/ignore
+    pager = delta --dark # use delta as the pager
 	precomposeunicode = false
-
-    # Make `git rebase` safer on macOS
-	# More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
-	trustctime = false
-
-    # Speed up commands involving untracked files such as `git status`.
-	# https://git-scm.com/docs/git-update-index#_untracked_cache
-	untrackedCache = true
-
-	# Treat spaces before tabs and all kinds of trailing whitespace as an error
-	# [default] trailing-space: looks for spaces at the end of a line
-	# [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+	trustctime = false # make `git rebase` safer on macOS
+	untrackedCache = true # speed up commands involving untracked files
 	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
 
 [interactive]
@@ -147,11 +99,9 @@
     hunk-header-decoration-style = yellow box
 
 [diff]
-	# Detect copies as well as renames
-	renames = copies
+	renames = copies # detect copies as well as renames
 
 [diff "bin"]
-	# Use `hexdump` to diff binary files
 	textconv = hexdump -v -C
 
 [filter "lfs"]
@@ -160,15 +110,19 @@
 	process = git-lfs filter-process
 	required = true
 
+[fetch]
+    prune = true
+
 [help]
-	# Automatically correct and execute mistyped commands
 	autocorrect = 1
 
 [init]
 	defaultBranch = main
 
+[log]
+    date = iso-local
+
 [merge]
-	# Include summaries of merged commits in newly created merge commit messages
 	log = true
 	conflictstyle = diff3
 
@@ -176,10 +130,8 @@
 	rebase = true
 
 [push]
-	# https://git-scm.com/docs/git-config#git-config-pushdefault
 	default = simple
-	# Make `git push` push relevant annotated tags when pushing branches out.
-	followTags = true
+	followTags = true # Make `git push` push relevant annotated tags when pushing branches out.
 
 # URL shorthands
 [url "git@github.com:"]
