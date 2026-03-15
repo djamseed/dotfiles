@@ -16,12 +16,12 @@ alias zap='rm -i'
 (($+commands[dust])) && alias du='dust -n 30 -X .git'
 (($+commands[fd])) && alias fd='fd -H -E .git'
 (($+commands[eza])) && {
+    alias ls='eza -l --group-directories-first'
     alias la='eza -ABghHl --icons --group-directories-first'
     alias lr='eza -T -L 5 --git-ignore --icons'
     alias lsd='eza -lADh'
     alias lsg='eza -lA --git --icons'
 }
-(($+commands[gls])) && alias ls='gls -lF --group-directories-first --color=auto'
 (($+commands[gping])) && alias ping=gping
 (($+commands[procs])) && alias ps=procs
 (($+commands[rg])) && {
