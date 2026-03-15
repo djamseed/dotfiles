@@ -1,0 +1,19 @@
+#
+# Kill process with specified port
+#
+
+ if [[ -z $1 ]]; then
+    echo "usage: killport <port>"
+    return 1
+  fi
+
+  local pids
+  pids=$(lsof -i:"$1" -t)
+
+  if [[ -z "$pids" ]]; then
+    echo "No process found on port $1"
+    return 1
+  fi
+
+  echo "Killing processes on port $1: $pids"
+  echo "$pids" | xargs kill -9
