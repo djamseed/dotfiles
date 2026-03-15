@@ -1,16 +1,14 @@
 #
 # Pretty print PATH, FPATH and MANPATH
-#
 
-print_header() {
-    echo -e "\n\033[1;34m$1\033[0m"
+print_path_table() {
+    local title="$1"
+    local pathvar="$2"
+
+    echo -e "\n\033[1;34m${title}\033[0m"
+    echo "${pathvar//:/$'\n'}" | nl -ba -nrz -w3 | awk '{printf "  \033[2m%s\033[0m  %s\n", $1, $2}'
 }
 
-print_header "PATH Directories:"
-echo -e ${PATH//:/\\n}
-
-print_header "MANPATH Directories:"
-echo -e ${MANPATH//:/\\n}
-
-print_header "FPATH Directories:"
-echo -e ${FPATH//:/\\n}
+print_path_table "PATH Directories:"   "$PATH"
+print_path_table "MANPATH Directories:" "$MANPATH"
+print_path_table "FPATH Directories:"  "$FPATH"

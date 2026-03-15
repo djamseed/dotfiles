@@ -2,4 +2,9 @@
 # Colorize help messages with bat
 #
 
+if [[ -z $1 ]]; then
+    echo "usage: help <tool>"
+    return 1
+fi
+
 (($+commands[bat]))  && "$@" --help 2>&1 | bat --plain --language=help

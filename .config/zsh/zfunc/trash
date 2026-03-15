@@ -2,4 +2,9 @@
 # Moves a file to the macOS trash
 #
 
+if [[ -z $1 ]]; then
+    echo "usage: trash <file|directory>"
+    return 1
+fi
+
 command mv "$@" ~/.Trash

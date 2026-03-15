@@ -4,7 +4,7 @@
 local archive_name exclude_pattern size cmd zipped_size
 
 if [ $# -lt 1 ]; then
-    echo "Usage: archive <dir_or_files...>"
+    echo "usage: archive <file|directory>"
     return 1
 fi
 
