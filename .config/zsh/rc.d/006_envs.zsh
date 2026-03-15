@@ -1,3 +1,3 @@
-# Initialize pyenv
+# Initialize mise
 
-(($+commands[pyenv])) && eval "$(pyenv init - zsh)"
+(($+commands[mise])) && eval "$(mise activate zsh)"

@@ -39,6 +39,9 @@ export DOCKER_CONFIG=$XDG_CONFIG_HOME/docker
 export DOTNET_CLI_HOME=$XDG_DATA_HOME/dotnet
 export GOPATH=$XDG_DATA_HOME/go
 export LESSHISTFILE=$XDG_STATE_HOME/less/history
+export MISE_CACHE_DIR=$XDG_CACHE_HOME/mise
+export MISE_CONFIG_DIR=$XDG_CONFIG_HOME/mise
+export MISE_DATA_DIR=$XDG_DATA_HOME/mise
 export NPM_CONFIG_CACHE=$XDG_CACHE_HOME/npm
 export NPM_CONFIG_CACHE=$XDG_CACHE_HOME/npm
 export NPM_CONFIG_INIT_MODULE=$XDG_CONFIG_HOME/npm/config/npm-init.js
@@ -48,9 +51,6 @@ export PYENV_ROOT=$XDG_DATA_HOME/pyenv
 export RIPGREP_CONFIG_PATH=$XDG_CONFIG_HOME/ripgrep/config
 export RUSTUP_HOME=$XDG_DATA_HOME/rustup
 export TLRC_CONFIG=$XDG_CONFIG_HOME/tldr/config.toml
-
-# .NET environment variables
-export DOTNET_ROOT=/usr/local/share/dotnet
 
 # Go environment variables
 export GOBIN=$GOPATH/bin
