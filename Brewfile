@@ -67,6 +67,7 @@ cask 'vivaldi'
 cask 'whatsapp'
 
 mas 'Amphetamine', id: 937984704
+mas 'Craft', id: 1487937127
 mas 'Hidden Bar', id: 1452453066
 mas 'iA Writer', id: 775737590
 mas 'Kindle', id: 302584613
