@@ -3,7 +3,7 @@
 [general]
 import = [
     "~/.config/alacritty/keybindings.toml",
-    "~/.config/alacritty/themes/rose-pine/rose-pine-moon.toml",
+    "~/.config/alacritty/themes/oxocarbon/oxocarbon-dark.toml",
 ]
 
 # -- window -------------------------------------------------------------------
@@ -14,8 +14,6 @@ padding = { x= 5, y = 5 }
 dynamic_padding = true
 decorations = "Buttonless"
 dynamic_title = true
-opacity = 0.80
-blur = true
 startup_mode = "Windowed"
 class = { general = "Alacritty", instance = "Alacritty" }
 option_as_alt = "OnlyLeft"
