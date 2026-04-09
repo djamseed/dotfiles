@@ -9,8 +9,9 @@
 	contributors = shortlog --summary --numbered
 	credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f" # credit an author on the latest commit
 	dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d" # remove merged branches
-	fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
-	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f" # switch to branch, creating it if necessary
+    fm = "!f() { git log --pretty=format:'%C(#78a9ff)%h  %C(#3ddbd9)%ad  %Creset%s%C(#42be65)  [%cn]%C(#ee79d1)%d' --decorate --date=short --grep=$1; }; f"
+    go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f" # switch to branch, creating it if necessary
+    graph = "!git log --graph --abbrev-commit --decorate --format=format:'%C(#78a9ff)%h%C(reset) - %C(#3ddbd9)%aD%C(reset) %C(bold #42be65)(%ar)%C(reset)%C(#ee79d1)%d%C(reset)%n          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
 	l = log --pretty=oneline -n 20 --graph --abbrev-commit # show latest 20 commits
 	p = !"git pull; git submodule foreach git pull origin main" # pull in remote changes for the current repo and all its submodules
 	reb = "!r() { git rebase -i HEAD~$1; }; r" # interactive rebase with given number of latest commits
@@ -18,7 +19,6 @@
 	retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r" # remove old tag with given name and tag the latest commit with it
 	s = status -s
 	tags = tag -l
-  	graph = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
 
 	# Merge GitHub pull request on top of the current branch or,
 	# if a branch name is specified, on top of the specified branch
@@ -47,16 +47,13 @@
 	local = yellow
 	remote = green
 
-[color "diff"]
-	meta = yellow bold
-	frag = magenta bold
-	old = red
-	new = green
-
 [color "status"]
 	added = yellow
 	changed = green
 	untracked = cyan
+
+[column]
+    ui = auto
 
 [commit]
 	template = ~/.config/git/commit-template
@@ -65,7 +62,7 @@
 	attributesfile = ~/.config/git/attributes
     editor = nvim
 	excludesfile = ~/.config/git/ignore
-    pager = delta --dark # use delta as the pager
+    pager = delta # use delta as the pager
 	precomposeunicode = false
 	trustctime = false # make `git rebase` safer on macOS
 	untrackedCache = true # speed up commands involving untracked files
@@ -75,28 +72,47 @@
     diffFilter = delta --color-only --features=interactive
 
 [delta]
+    dark = true
     features = side-by-side line-numbers decorations
-    syntax-theme = Dracula
-    whitespace-error-style = 22 reverse
-
-[delta "interactive"]
     keep-plus-minus-markers = false
-
-[delta "line-numbers"]
     line-numbers = true
-    line-numbers-right-style = cyan
-    line-numbers-left-style = cyan
-    line-numbers-zero-style = "#444444"
-    line-numbers-minus-style = 124
-    line-numbers-plus-style = 28
+    navigate = true
+    # Use 'none' for syntax-theme so Oxocarbon colors shine through
+    syntax-theme = none
+    whitespace-error-style = "#ee5396" reverse
+
+    # File header (Using  path blue #78a9ff)
+    file-style = "#78a9ff" bold
+    file-decoration-style = "#393939" ul
+
+    # Hunk header (Using the Oxocarbon Grey)
+    hunk-header-style = "#dde1e6"
+    hunk-header-decoration-style = "#393939" box
+    hunk-header-file-meta-style = "#525252"
+
+    # Added lines (Subtle Oxocarbon Green background)
+    plus-style = "syntax" "#1c261e"
+    plus-emph-style = "syntax" "#2d4a34"
+
+    # Removed lines (Subtle Oxocarbon Red/Magenta background)
+    minus-style = "syntax" "#2a181d"
+    minus-emph-style = "syntax" "#5e2e3a"
+
+    # Line numbers (Using Oxocarbon Grey/Magenta/Green)
+    line-numbers-left-style = "#525252"
+    line-numbers-right-style = "#525252"
+    line-numbers-minus-style = "#ee5396" # Oxocarbon Red-Pink
+    line-numbers-plus-style = "#42be65"  # Oxocarbon Green
+    line-numbers-zero-style = "#393939"
     line-numbers-right-format = "{np:>4}│"
     line-numbers-left-format = "{nm:>4}┊"
 
-[delta "decorations"]
-    commit-decoration-style = bold yellow box ul
-    file-style = bold yellow ul
-    file-decoration-style = none
-    hunk-header-decoration-style = yellow box
+    # Custom colors for conflict markers to match Oxocarbon
+    merge-conflict-begin-symbol = "󰭦"
+    merge-conflict-end-symbol = "󰭦"
+    merge-conflict-ours-diff-header-style = "#ee79d1" bold
+    merge-conflict-theirs-diff-header-style = "#3ddbd9" bold
+    merge-conflict-base-diff-header-style = "#525252"
 
 [diff]
 	renames = copies # detect copies as well as renames
@@ -124,7 +140,7 @@
 
 [merge]
 	log = true
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 
 [pull]
 	rebase = true
@@ -149,3 +165,6 @@
 
 [url "git://gist.github.com/"]
 	insteadOf = "gist:"
+
+[maintenance]
+    auto = true

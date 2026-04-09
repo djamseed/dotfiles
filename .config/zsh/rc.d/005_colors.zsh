@@ -3,4 +3,4 @@ export CLICOLOR=1
 export LSCOLORS=GxFxCxDxCxegedabagaced
 
 # used with eza output
-export LS_COLORS=$(vivid generate rose-pine-dawn)
+export LS_COLORS=$(vivid generate ansi)

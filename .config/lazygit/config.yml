@@ -4,6 +4,7 @@ gui:
     branchColorPatterns:
         "^fix/": "#d73a4a"
         "^feat/": "#a2eeef"
+        "^task/": "#a2eeef"
         "^build/": "#0075ca"
         "^ci/": "#0075ca"
         "^docs/": "#11aaff"
@@ -23,14 +24,25 @@ gui:
     # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#color-attributes
     theme:
         activeBorderColor:
-            - green
+            - "#42be65" # oxocarbon green
             - bold
         inactiveBorderColor:
-            - white
+            - "#393939" # oxocarbon gray
         optionsTextColor:
-            - blue
+            - "#78a9ff" # oxocarbon blue
         selectedLineBgColor:
-            - default
+            - "#262626" # oxocarbon slightly lighter bg
+        cherryPickedCommitBgColor:
+            - "#393939" # oxocarbon gray (mid)
+        cherryPickedCommitFgColor:
+            - "#be95ff" # oxocarbon purple
+        unstagedChangesColor:
+            - "#ee5396" # oxocarbon pink
+        searchingActiveBorderColor:
+            - "#be95ff" # oxocarbon purple
+            - bold
+        defaultFgColor:
+            - "#f2f4f8" # oxocarbon white
 
     showRandomTip: false
 

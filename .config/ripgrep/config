@@ -12,12 +12,12 @@
 --glob=!.git/*
 
 # Set the colors.
---colors=line:fg:yellow
+
+--colors=line:fg:120,169,255
 --colors=line:style:bold
---colors=path:fg:green
---colors=path:style:bold
---colors=match:fg:black
---colors=match:bg:yellow
+--colors=path:fg:190,149,255
+--colors=match:fg:22,22,22
+--colors=match:bg:66,190,101
 --colors=match:style:nobold
 
 # Search case insentitively if pattern is all lowercase otherwise search case sensitively
