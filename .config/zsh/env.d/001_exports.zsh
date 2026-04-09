@@ -47,7 +47,6 @@ export NPM_CONFIG_CACHE=$XDG_CACHE_HOME/npm
 export NPM_CONFIG_INIT_MODULE=$XDG_CONFIG_HOME/npm/config/npm-init.js
 export NUGET_PACKAGES=$XDG_DATA_HOME/NugetPackages
 export OMNISHARPHOME=$XDG_CONFIG_HOME/omnisharp
-export PYENV_ROOT=$XDG_DATA_HOME/pyenv
 export RIPGREP_CONFIG_PATH=$XDG_CONFIG_HOME/ripgrep/config
 export RUSTUP_HOME=$XDG_DATA_HOME/rustup
 export TLRC_CONFIG=$XDG_CONFIG_HOME/tldr/config.toml
