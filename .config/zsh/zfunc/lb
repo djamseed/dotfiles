@@ -1,0 +1,10 @@
+#
+# Monitor logs with tail and bat
+#
+
+if [[ -z $1 ]]; then
+    echo "usage: lb <log_file>"
+    return 1
+fi
+
+(($+commands[bat]))  && tail -f "$1" | bat --paging=never --style=plain --language=log
