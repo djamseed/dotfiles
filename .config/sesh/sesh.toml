@@ -1,0 +1,26 @@
+[default_session]
+path = "~"
+preview_command = "eza -ABghHl --icons --group-directories-first {}"
+
+[[session]]
+name = "dotfiles"
+path = "~/.dotfiles"
+startup_command = "nvim ."
+preview_command = "eza -ABghHl --icons --group-directories-first {}"
+
+[[session]]
+name = "tmux config"
+path = "~/.dotfiles/.config/tmux"
+startup_command = "nvim tmux.conf"
+preview_command = "bat --color=always ~/.dotfiles/.config/tmux/tmux.conf"
+
+[[session]]
+name = "nvim config"
+path = "~/.dotfiles/.config/nvim"
+startup_command = "nvim ."
+preview_command = "eza -ABghHl --icons --group-directories-first {}"
+
+[[window]]
+name = "git"
+startup_script = "lazygit"
+
