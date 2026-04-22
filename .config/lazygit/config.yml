@@ -24,25 +24,27 @@ gui:
     # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#color-attributes
     theme:
         activeBorderColor:
-            - "#42be65" # oxocarbon green
+            - "#78a9ff"
             - bold
         inactiveBorderColor:
-            - "#393939" # oxocarbon gray
+            - "#393939"
         optionsTextColor:
-            - "#78a9ff" # oxocarbon blue
+            - "#be95ff"
         selectedLineBgColor:
-            - "#262626" # oxocarbon slightly lighter bg
+            - "#262626"
+        selectedRangeBgColor:
+            - "#262626"
         cherryPickedCommitBgColor:
-            - "#393939" # oxocarbon gray (mid)
+            - "#393939"
         cherryPickedCommitFgColor:
-            - "#be95ff" # oxocarbon purple
+            - "#be95ff"
         unstagedChangesColor:
-            - "#ee5396" # oxocarbon pink
-        searchingActiveBorderColor:
-            - "#be95ff" # oxocarbon purple
-            - bold
+            - "#ee5396"
         defaultFgColor:
-            - "#f2f4f8" # oxocarbon white
+            - "#dde1e6"
+        searchingActiveBorderColor:
+            - "#be95ff"
+            - bold
 
     showRandomTip: false
 

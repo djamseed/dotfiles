@@ -16,11 +16,32 @@ command = "$SHELL" -l -c 'tmux new-session -A -s main'
 
 # -- appearance ----------------------------------------------------------------
 
-theme = Oxocarbon
-font-family = FiraCode Nerd Font
+font-family = Blex Mono Nerd Font
 font-size = 14
 font-feature = -calt, -dlig, -liga
 bold-color = bright
+
+palette = 0=#161616
+palette = 1=#ee5396
+palette = 2=#42be65
+palette = 3=#ffe97b
+palette = 4=#78a9ff
+palette = 5=#be95ff
+palette = 6=#33b1ff
+palette = 7=#dde1e6
+palette = 8=#393939
+palette = 9=#ee5396
+palette = 10=#42be65
+palette = 11=#ffe97b
+palette = 12=#78a9ff
+palette = 13=#be95ff
+palette = 14=#33b1ff
+palette = 15=#ffffff
+
+background = #161616
+foreground = #ffffff
+selection-background = #393939
+selection-foreground = #ffffff
 
 # -- cursor --------------------------------------------------------------------
 

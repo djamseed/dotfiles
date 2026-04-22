@@ -86,7 +86,7 @@
     file-decoration-style = "#393939" ul
 
     # Hunk header (Using the Oxocarbon Grey)
-    hunk-header-style = "#dde1e6"
+    hunk-header-style = syntax
     hunk-header-decoration-style = "#393939" box
     hunk-header-file-meta-style = "#525252"
 

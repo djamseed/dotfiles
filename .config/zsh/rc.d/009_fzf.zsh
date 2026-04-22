@@ -2,14 +2,16 @@
 
 (($+commands[fzf])) && {
 export FZF_DEFAULT_OPTS='
-      --height 75% --multi --reverse --margin=0,1
-      --bind ctrl-d:page-down,ctrl-u:page-up
-      --bind pgdn:preview-page-down,pgup:preview-page-up
-      --marker="✚" --pointer="▶" --prompt="❯ "
-      --no-separator --scrollbar="█" --border
-      --color bg+:#262626,fg+:#f2f4f8,hl:#78a9ff,hl+:#82cfff
-      --color border:#393939,info:#be95ff,header:#78a9ff,spinner:#42be65
-      --color prompt:#78a9ff,pointer:#ff7eb6,marker:#42be65'
+    --ansi
+    --height 75% --multi --reverse --margin=0,1
+    --bind ctrl-d:page-down,ctrl-u:page-up
+    --bind pgdn:preview-page-down,pgup:preview-page-up
+    --marker="✚" --pointer="▶" --prompt="❯ "
+    --no-separator --scrollbar="█" --border
+    --color=bg+:-1,fg+:7,hl:4,hl+:4
+    --color=border:8,header:4,gutter:-1
+    --color=spinner:2,pointer:1,marker:2
+    --color=prompt:5,info:5'
 
     if (($+commands[fd])); then
         export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git --color=never'

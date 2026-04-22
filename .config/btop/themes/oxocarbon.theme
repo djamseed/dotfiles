@@ -11,13 +11,13 @@ theme[main_fg]="#f2f4f8"
 theme[title]="#3ddbd9"
 
 # Highlight color for keyboard shortcuts
-theme[hi_fg]="#78a9ff"
+theme[hi_fg]="#be95ff"
 
 # Background color of selected items
 theme[selected_bg]="#262626"
 
 # Foreground color of selected items
-theme[selected_fg]="#08bdba"
+theme[selected_fg]="#78a9ff"
 
 # Color of inactive/disabled text
 theme[inactive_fg]="#393939"
@@ -44,9 +44,9 @@ theme[proc_box]="#dde1e6"
 theme[div_line]="#525252"
 
 # Temperature graph colors
-theme[temp_start]="#08bdba"
-theme[temp_mid]="#3ddbd9"
-theme[temp_end]="#78a9ff"
+theme[temp_start]="#be95ff"
+theme[temp_mid]="#78a9ff"
+theme[temp_end]="#33b1ff"
 
 # CPU graph colors
 theme[cpu_start]="#42be65"
@@ -54,9 +54,9 @@ theme[cpu_mid]="#be95ff"
 theme[cpu_end]="#ee5396"
 
 # Mem/Disk free meter
-theme[free_start]="#08bdba"
+theme[free_start]="#393939"
 theme[free_mid]=""
-theme[free_end]="#3ddbd9"
+theme[free_end]="#78a9ff"
 
 # Mem/Disk cached meter
 theme[cached_start]="#78a9ff"
@@ -74,9 +74,9 @@ theme[used_mid]=""
 theme[used_end]="#ff7eb6"
 
 # Download graph colors
-theme[download_start]="#08bdba"
-theme[download_mid]="#3ddbd9"
-theme[download_end]="#78a9ff"
+theme[download_start]="#be95ff"
+theme[download_mid]="#78a9ff"
+theme[download_end]="#33b1ff"
 
 # Upload graph colors
 theme[upload_start]="#ee5396"
