@@ -50,6 +50,7 @@ export OMNISHARPHOME=$XDG_CONFIG_HOME/omnisharp
 export RIPGREP_CONFIG_PATH=$XDG_CONFIG_HOME/ripgrep/config
 export RUSTUP_HOME=$XDG_DATA_HOME/rustup
 export TLRC_CONFIG=$XDG_CONFIG_HOME/tldr/config.toml
+export _ZO_DATA_DIR=$XDG_DATA_HOME/zoxide
 
 # Go environment variables
 export GOBIN=$GOPATH/bin
