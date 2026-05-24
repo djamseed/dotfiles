@@ -1,5 +1,7 @@
 cask_args appdir: '/Applications'
 
+tap ojuschugh1/sqz
+
 brew 'bash'
 brew 'bat'
 brew 'btop'
@@ -29,6 +31,7 @@ brew 'mas'
 brew 'mise'
 brew 'mpv'
 brew 'neovim'
+brew 'ojuschugh1/sqz'
 brew 'openssh'
 brew 'openssl'
 brew 'powerlevel10k'
