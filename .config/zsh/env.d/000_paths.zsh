@@ -3,6 +3,7 @@ typeset -U path cdpath fpath manpath
 
 # Set the list of directories that zsh searches for commands
 path=(
+    ~/.local/bin(N)
     /usr/local/{,s}bin(N)
     $HOMEBREW_PREFIX/opt/curl/bin(N)
     $HOMEBREW_PREFIX/opt/make/libexec/gnubin(N)
