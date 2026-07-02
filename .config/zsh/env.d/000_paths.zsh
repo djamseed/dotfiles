@@ -5,6 +5,7 @@ typeset -U path cdpath fpath manpath
 path=(
     ~/.local/bin(N)
     /usr/local/{,s}bin(N)
+    $XDG_DATA_HOME/go/bin(N)
     $HOMEBREW_PREFIX/opt/curl/bin(N)
     $HOMEBREW_PREFIX/opt/make/libexec/gnubin(N)
     $HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnubin(N)
