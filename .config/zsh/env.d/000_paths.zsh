@@ -3,13 +3,13 @@ typeset -U path cdpath fpath manpath
 
 # Set the list of directories that zsh searches for commands
 path=(
-    ~/.local/bin(N)
     /usr/local/{,s}bin(N)
-    $XDG_DATA_HOME/go/bin(N)
+    $DOTNET_CLI_HOME/.dotnet/tools(N)
     $HOMEBREW_PREFIX/opt/curl/bin(N)
-    $HOMEBREW_PREFIX/opt/make/libexec/gnubin(N)
     $HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnubin(N)
-    /Applications/Docker.app/Contents/Resources/bin(N)
+    $HOMEBREW_PREFIX/opt/make/libexec/gnubin(N)
+    $XDG_DATA_HOME/bin(N)
+    $XDG_DATA_HOME/go/bin(N)
     $path
 )
 
@@ -17,7 +17,7 @@ path=(
 manpath=(
     /usr/local/share/man(N)
     /usr/share/man(N)
-    $HOMEBREW_PREFIX/opt/make/libexec/gnuman(N)
     $HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnuman(N)
+    $HOMEBREW_PREFIX/opt/make/libexec/gnuman(N)
     $manpath
 )
