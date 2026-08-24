@@ -1,0 +1,6 @@
+:PROPERTIES:
+:TYPE:     moc
+:CREATED:  %U
+:END:
+#+title: ${title}
+#+filetags: :moc:

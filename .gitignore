@@ -59,6 +59,7 @@ tags
 # Ignore tmux plugins
 .config/tmux/plugins/**
 
-# Ignore git user configuration
+# Machine-local identity, never committed (see the .example files)
 .config/git/local
+.config/doom/local/personal.el
 # End of https://www.toptal.com/developers/gitignore/api/macos,vim

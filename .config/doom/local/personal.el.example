@@ -1,0 +1,11 @@
+;;; $DOOMDIR/local/personal.el -*- lexical-binding: t; -*-
+;;; Copy this to local/personal.el and fill it in. That file is gitignored, so
+;;; personal details stay out of this public repo. Mirrors the pattern used for
+;;; git in ~/.config/git/local/user.
+
+(setq user-full-name    "Your Name"
+      user-mail-address "you@example.com")
+
+;; Google Calendar ID for org-gcal. Defaults to `user-mail-address'; override
+;; here if you sync a calendar that isn't your primary one.
+;; (setq +gcal-calendar-id "something@group.calendar.google.com")

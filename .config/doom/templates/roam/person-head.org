@@ -1,0 +1,9 @@
+:PROPERTIES:
+:TYPE:     person
+:ROLE:
+:NATION:
+:BORN:
+:CREATED:  %U
+:END:
+#+title: ${title}
+#+filetags: :person:

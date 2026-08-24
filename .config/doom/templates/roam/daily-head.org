@@ -1,0 +1,20 @@
+:PROPERTIES:
+:TYPE:     daily
+:DAY:      %<%A>
+:WEEK:     %<%G-W%V>
+:ENERGY:
+:MOOD:
+:SLEEP:
+:WEIGHT:
+:READING:
+:CREATED:  %U
+:END:
+#+title: %<%Y-%m-%d %A>
+#+filetags: :daily:
+
+* Notes
+
+* Reflections
+** What went well?
+** What I'd do differently?
+** 3 things I'm grateful for                                      :gratitude:

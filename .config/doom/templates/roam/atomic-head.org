@@ -1,0 +1,8 @@
+:PROPERTIES:
+:TYPE:     atomic
+:TOPIC:
+:STATUS:   seedling
+:CREATED:  %U
+:END:
+#+title: ${title}
+#+filetags:

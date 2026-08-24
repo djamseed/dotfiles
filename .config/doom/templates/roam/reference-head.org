@@ -1,0 +1,8 @@
+:PROPERTIES:
+:TYPE:     reference
+:TOPIC:
+:STATUS:   seedling
+:CREATED:  %U
+:END:
+#+title: ${title}
+#+filetags: :reference:

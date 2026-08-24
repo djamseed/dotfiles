@@ -1,0 +1,10 @@
+
+#+begin_quote
+*Context* — this map organises concepts and notes related to *${title}*: %?
+#+end_quote
+
+* Landscape
+# Obsidian uses a dataview query here. The org equivalent is the org-roam
+# backlinks buffer (SPC n r r): every note whose :TOPIC: points at this map
+# shows up there. Add standouts by hand below.
+-

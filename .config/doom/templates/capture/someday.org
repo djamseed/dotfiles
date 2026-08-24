@@ -1,0 +1,5 @@
+* %?
+:PROPERTIES:
+:CREATED: %U
+:END:
+%i

@@ -1,0 +1,13 @@
+
+* Profile
+%?
+
+#+begin_quote
+A defining quote or short bio.
+#+end_quote
+
+* Key contributions & mental models
+-
+
+* External links
+- [[https://en.wikipedia.org/wiki/%(replace-regexp-in-string " " "_" "${title}")][Wikipedia]]

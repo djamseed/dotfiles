@@ -1,0 +1,5 @@
+* %?
+%^T
+:PROPERTIES:
+:CREATED: %U
+:END:
