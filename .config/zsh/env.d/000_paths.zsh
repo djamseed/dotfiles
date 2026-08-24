@@ -8,6 +8,7 @@ path=(
     $HOMEBREW_PREFIX/opt/curl/bin(N)
     $HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnubin(N)
     $HOMEBREW_PREFIX/opt/make/libexec/gnubin(N)
+    $XDG_CONFIG_HOME/emacs/bin
     $XDG_DATA_HOME/bin(N)
     $XDG_DATA_HOME/go/bin(N)
     $path
