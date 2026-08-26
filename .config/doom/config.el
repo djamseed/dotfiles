@@ -36,6 +36,82 @@
 (after! which-key
   (setq which-key-idle-delay 0.3))
 
+;;; --- Modeline ---
+;; Doom's ui/modeline module sets doom-modeline's options in its `:init' block
+;; (sources/doom+/modules/ui/modeline/config.el), so overrides go in `after!'.
+(after! doom-modeline
+  (setq
+   ;; Doom sets this to nil. Note that `doom-modeline-workspace-name' is NOT the
+   ;; knob for Doom workspaces — that segment only reads eyebrowse/tab-bar, and
+   ;; `:ui workspaces' is persp-mode. `persp-name' is the one that works here.
+   doom-modeline-persp-name t
+   ;; The buffer path is project-relative ('relative-from-project), so nothing
+   ;; currently names the project itself. Off by default (follows `project-mode-line').
+   doom-modeline-project-name t
+   ;; ...but Doom's 'relative-from-project repeats the project directory in the
+   ;; path, so the two together read "[.dotfiles]  .dotfiles/.config/doom/config.el".
+   ;; Drop it from the path and let the project segment own it.
+   doom-modeline-buffer-file-name-style 'relative-to-project
+   ;; Word count, but only in prose buffers — see
+   ;; `doom-modeline-continuous-word-count-modes' (org, markdown, gfm).
+   doom-modeline-enable-word-count t
+   ;; Doom pins this to 'simple, which lumps errors+warnings+info into a single
+   ;; number. 'auto breaks it out per severity when the window is wide enough and
+   ;; falls back to the lumped count when it isn't.
+   doom-modeline-check 'auto
+   ;; Branch names truncate at 15 chars by default.
+   doom-modeline-vcs-max-length 24))
+
+;; Git diff stats next to the branch name.
+;;
+;; doom-modeline's `vcs' segment shows the branch and its state but no counts.
+;; `:ui vc-gutter' already runs diff-hl, which has computed every hunk in the
+;; buffer — so read the numbers off its overlays instead of shelling out to git
+;; on every redisplay.
+(defvar-local +modeline-diff-stat nil
+  "Cached (ADDED CHANGED DELETED) line counts, or nil when the buffer is clean.")
+
+(defun +modeline-update-diff-stat (&rest _)
+  "Recompute `+modeline-diff-stat' from diff-hl's hunk overlays."
+  (setq +modeline-diff-stat
+        (save-restriction
+          (widen)
+          (let ((add 0) (chg 0) (del 0))
+            (dolist (o (overlays-in (point-min) (point-max)))
+              (when (overlay-get o 'diff-hl-hunk)
+                (pcase (overlay-get o 'diff-hl-hunk-type)
+                  ('insert (cl-incf add (count-lines (overlay-start o) (overlay-end o))))
+                  ('change (cl-incf chg (count-lines (overlay-start o) (overlay-end o))))
+                  ;; A `delete' hunk is a 1-line marker — the removed lines are
+                  ;; not in the buffer, so count the hunk, not its height.
+                  ('delete (cl-incf del 1)))))
+            (and (> (+ add chg del) 0) (list add chg del))))))
+
+(after! diff-hl
+  (advice-add #'diff-hl-update :after #'+modeline-update-diff-stat))
+
+;; Appending to the `vcs' segment rather than redefining the whole `main'
+;; modeline: `doom-modeline-def-modeline' would mean pasting all 30-odd segment
+;; names into this file and re-syncing them on every doom-modeline upgrade.
+(after! doom-modeline
+  (defadvice! +modeline-append-diff-stat-a (result)
+    "Append `+modeline-diff-stat' counts to the vcs segment."
+    :filter-return #'doom-modeline-segment--vcs
+    (if-let* ((stat +modeline-diff-stat)
+              ;; No branch shown means no repo (or a limited-width window) —
+              ;; in either case there is nothing to hang the counts off.
+              ((not (string-empty-p (string-trim (format-mode-line result))))))
+        (cl-destructuring-bind (add chg del) stat
+          (concat result
+                  (doom-modeline-spc)
+                  (string-join
+                   (delq nil
+                         (list (and (> add 0) (propertize (format "+%d" add) 'face 'doom-modeline-info))
+                               (and (> chg 0) (propertize (format "~%d" chg) 'face 'doom-modeline-warning))
+                               (and (> del 0) (propertize (format "-%d" del) 'face 'doom-modeline-urgent))))
+                   " ")))
+      result)))
+
 ;;; --- macOS PATH fix ---
 ;; GUI Emacs (Emacs.app, and the daemon) doesn't source your shell rc files, so
 ;; PATH can be wrong — this breaks magit, flycheck, LSP servers, gpg, etc.
