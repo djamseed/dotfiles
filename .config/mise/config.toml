@@ -13,6 +13,7 @@ verbose = false
 dotnet = "latest"
 go = "latest"
 node = "latest"
+"npm:@tobilu/qmd" = "latest"
 python = "latest"
 rust = "latest"
 zig = "latest"
