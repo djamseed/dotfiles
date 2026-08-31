@@ -1,12 +1,12 @@
 
 %?
 
-# Write this so it is self-contained: a future reader should understand it
-# without following five links. Set :TOPIC: above to the parent/hub note and
-# :STATUS: to evergreen once it is comprehensive.
+# Self-contained: a future reader should understand this without following five
+# links. Set :TOPIC: to the parent/hub note, and :STATUS: to evergreen once it
+# is comprehensive.
 
 -----
 
 * Connections
-# Related notes NOT already linked in the prose above. Backlinks: SPC n r r
+# Related notes NOT already linked in the prose above. Backlinks: SPC n r b
 -

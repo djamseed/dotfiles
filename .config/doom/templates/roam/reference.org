@@ -1,8 +1,11 @@
-
-* Source
-%^{Source URL}
+- Source ::
+- Author ::
+- URL ::
 
 * Summary
 %?
 
 * Notes
+
+* Connections
+-

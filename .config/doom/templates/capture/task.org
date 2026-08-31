@@ -1,6 +1,1 @@
 * TODO %?
-:PROPERTIES:
-:CREATED: %U
-:END:
-%i
-%a

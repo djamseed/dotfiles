@@ -1,4 +1,0 @@
-* PROJ %?
-:PROPERTIES:
-:CREATED: %U
-:END:

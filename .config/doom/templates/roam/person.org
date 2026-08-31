@@ -1,13 +1,10 @@
+- Role ::
+- Where ::
+- Met ::
 
-* Profile
+* Notes
 %?
 
-#+begin_quote
-A defining quote or short bio.
-#+end_quote
-
-* Key contributions & mental models
+* Threads
+# Open loops with this person. Backlinks from the daily log: SPC n r b
 -
-
-* External links
-- [[https://en.wikipedia.org/wiki/%(replace-regexp-in-string " " "_" "${title}")][Wikipedia]]

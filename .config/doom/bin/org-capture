@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Global org-capture into today's log. Bound to alt-c in aerospace.toml.
+#
+#   org-capture        the capture menu
+#   org-capture t      straight into Task (t/e/n/m/h)
+#
+# Frame creation, sizing and cleanup are Doom's (+org-capture/open-frame); this
+# only handles reaching the daemon and getting macOS to bring Emacs forward.
+
+set -euo pipefail
+
+key="${1:-}"
+
+# Prefer the app bundle's client so its version always matches the daemon.
+for candidate in \
+  /Applications/Emacs.app/Contents/MacOS/bin/emacsclient \
+  "$(command -v emacsclient || true)"
+do
+  [ -x "$candidate" ] && { client="$candidate"; break; }
+done
+
+# exec-and-forget discards stderr, so surface failures where they'll be seen.
+notify() {
+  osascript -e "display notification \"$1\" with title \"org-capture\"" >/dev/null 2>&1 || true
+}
+
+[ -n "${client:-}" ] || { notify "emacsclient not found"; exit 1; }
+
+if ! "$client" --eval t >/dev/null 2>&1; then
+  notify "Emacs daemon is not running"
+  exit 1
+fi
+
+# Activate first: the capture frame then opens inside an already-frontmost app,
+# so its minibuffer prompt has focus. Doing it afterwards is too late, because
+# --eval blocks until the template is chosen.
+osascript -e 'tell application "Emacs" to activate' >/dev/null 2>&1 || true
+
+"$client" --eval "(+org-capture/open-frame \"\" \"${key}\")" >/dev/null 2>&1 \
+  || { notify "capture failed"; exit 1; }

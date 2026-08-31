@@ -1,0 +1,17 @@
+:PROPERTIES:
+:TYPE:     weekly
+:WEEK:     %<%G-W%V>
+:CREATED:  %U
+:END:
+#+title: %<%G-W%V>
+#+filetags: :weekly:
+
+* Days
+# C-c C-x C-u on the block below rebuilds it. `SPC n j u' rebuilds every block
+# in the buffer.
+#+BEGIN: bujo-metrics :week "%<%G-W%V>"
+#+END:
+
+* Review
+** What defined this week?
+** What carries forward?

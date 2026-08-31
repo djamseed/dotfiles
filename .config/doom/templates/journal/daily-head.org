@@ -12,9 +12,9 @@
 #+title: %<%Y-%m-%d %A>
 #+filetags: :daily:
 
-* Notes
+* Log
 
 * Reflections
 ** What went well?
-** What I'd do differently?
-** 3 things I'm grateful for                                      :gratitude:
+** What I would do differently?
+** Grateful for                                                   :gratitude:

@@ -1,7 +1,7 @@
-* TODO %?
+* TODO %^{Habit}
 SCHEDULED: <%<%Y-%m-%d %a> .+1d>
 :PROPERTIES:
-:STYLE:            habit
-:REPEAT_TO_STATE:  TODO
-:CREATED:          %U
+:STYLE:    habit
+:CREATED:  %U
 :END:
+%?
