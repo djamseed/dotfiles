@@ -1,10 +1,9 @@
-
 #+begin_quote
-*Context* — this map organises concepts and notes related to *${title}*: %?
+This map organises concepts related to *${title}* -- %^{Scope, one line}.
 #+end_quote
 
 * Landscape
-# Obsidian uses a dataview query here. The org equivalent is the org-roam
-# backlinks buffer (SPC n r r): every note whose :TOPIC: points at this map
-# shows up there. Add standouts by hand below.
--
+%?
+
+# A MoC is pure navigation. Prefer a hub atomic note for a focused topic; use
+# this only when a domain has many top-level notes and no single hub fits.

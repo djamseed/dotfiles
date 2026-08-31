@@ -1,0 +1,6 @@
+* Meeting: %^{Subject}                                             :meeting:
+%^T
+** Attendees
+- %^{Attendees}
+** Notes
+%?
