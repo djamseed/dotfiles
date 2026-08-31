@@ -134,6 +134,10 @@ alt-f = "fullscreen"
 
 alt-shift-c = 'reload-config'
 
+# Global org-capture into today's log. Opens a floating Emacs frame; see the
+# on-window-detected rule below and $DOOMDIR/bin/org-capture.
+alt-c = 'exec-and-forget /Users/djamseed/.dotfiles/.config/doom/bin/org-capture'
+
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 alt-shift-semicolon = 'mode service'
 
@@ -214,4 +218,9 @@ run = 'move-node-to-workspace 5'
 ## Floaters
 [[on-window-detected]]
 if.app-id = 'com.1password.1password'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'org.gnu.Emacs'
+if.window-title-regex-substring = 'org-capture'
 run = 'layout floating'
