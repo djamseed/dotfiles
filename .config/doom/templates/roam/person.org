@@ -1,10 +1,10 @@
-- Role ::
-- Where ::
-- Met ::
-
-* Notes
+* Profile
+#+begin_quote
 %?
+#+end_quote
 
-* Threads
-# Open loops with this person. Backlinks from the daily log: SPC n r b
+* Key contributions & mental models
 -
+
+* External links
+- [[https://en.wikipedia.org/wiki/${title}][Wikipedia]]

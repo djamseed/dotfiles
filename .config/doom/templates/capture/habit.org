@@ -1,7 +1,0 @@
-* TODO %^{Habit}
-SCHEDULED: <%<%Y-%m-%d %a> .+1d>
-:PROPERTIES:
-:STYLE:    habit
-:CREATED:  %U
-:END:
-%?

@@ -27,7 +27,7 @@
 ;;; ─── Theme & font ───────────────────────────────────────────────────────────
 
 (setq doom-theme 'oxocarbon
-      doom-font (font-spec :family "BlexMono Nerd Font" :size 15)
+      doom-font (font-spec :family "FiraCode Nerd Font" :size 15)
       doom-variable-pitch-font (font-spec :family "iA Writer Quattro V" :size 15)
       mixed-pitch-set-height t)
 
@@ -126,31 +126,27 @@
         doom-modeline-workspace-name nil
         doom-modeline-env-version nil))
 
+
 ;;; ─── Org — layout ───────────────────────────────────────────────────────────
 
 ;; ~/org/
-;;   journal/      one file per day, plus one per ISO week. Flat, because
-;;                 `org-agenda-files' expands a directory non-recursively.
-;;   collections/  habits, reading list — the only refile target.
-;;   notes/        org-roam knowledge base.
+;;   journal/      one file per day, flat. `org-agenda-files' expands a
+;;                 directory non-recursively, so flat it stays.
+;;   notes/        org-roam knowledge base — atomic, MoC, people. Flat, mirroring
+;;                 the Obsidian vault's Notes/.
 ;;   archive/      archived subtrees, datetree'd.
 ;;   calendar.org  org-gcal's fetch target.
 ;;
-;; No inbox, deliberately: the daily log is the capture target and migration is
-;; the only triage step. An inbox would just be a queue to drain.
 
 (setq org-directory "~/org/")
 
 (defvar +org-journal-dir
   (file-name-as-directory (expand-file-name "journal" org-directory)))
-(defvar +org-collections-dir
-  (file-name-as-directory (expand-file-name "collections" org-directory)))
 (defvar +org-notes-dir
   (file-name-as-directory (expand-file-name "notes" org-directory)))
 (defvar +org-archive-dir
   (file-name-as-directory (expand-file-name "archive" org-directory)))
 (defvar +org-calendar-file (expand-file-name "calendar.org" org-directory))
-(defvar +org-habits-file   (expand-file-name "habits.org" +org-collections-dir))
 
 (defun +org-ensure-tree ()
   "Create the `org-directory' subtree if any of it is missing.
@@ -158,10 +154,7 @@ org-capture, org-roam and org-archive all assume their target directory exists �
 a buffer visiting a file in a missing one is read-only, so the save fails partway
 through a capture. Running this at startup is what makes a fresh clone of this
 repo enough to set up a new machine."
-  (dolist (dir (list +org-journal-dir +org-collections-dir +org-archive-dir
-                     +org-notes-dir
-                     (expand-file-name "people" +org-notes-dir)
-                     (expand-file-name "ref" +org-notes-dir)))
+  (dolist (dir (list +org-journal-dir +org-notes-dir +org-archive-dir))
     (make-directory dir t)))
 
 (+org-ensure-tree)
@@ -176,6 +169,10 @@ symlinks that exist for every modified buffer and that org-agenda chokes on.")
   "Directory holding org-capture / org-roam template bodies, one per file.
 Kept out of `+snippets-dir' because Doom adds that to `yas-snippet-dirs', where
 yasnippet would try to read these as snippet definitions.")
+
+(defvar +org-template-time nil
+  "Time a template expansion is relative to, for `%(...)' escapes.
+Bound by `+org-template-expand-time'; nil means now.")
 
 (defun +org-template (name)
   "Return a `(file ...)' org-capture template body for NAME.
@@ -195,21 +192,31 @@ A function keeps the live-editing that a literal string would lose."
   (lambda () (+org-template-string name)))
 
 (defun +org-template-expand-time (str &optional time)
-  "Expand the org-capture escapes %<...> and %U in STR, as of TIME.
-The journal helpers write their own file head, outside `org-capture'."
-  (let ((s (replace-regexp-in-string
-            "%<\\([^>]*\\)>"
-            (lambda (m) (format-time-string (match-string 1 m) time))
-            str t t)))
-    (replace-regexp-in-string
-     "%U" (format-time-string "[%Y-%m-%d %a %H:%M]" time) s t t)))
-
-(defun +org-collection-files ()
-  "Every file in `+org-collections-dir'.
-A function, not a list: `org-refile-targets' funcalls an `fboundp' symbol, so
-the targets stay current as collections are added."
-  (and (file-directory-p +org-collections-dir)
-       (directory-files +org-collections-dir t +org-file-regexp)))
+  "Expand the org-capture escapes %(sexp), %<...> and %U in STR, as of TIME.
+The journal helpers write their own file head, outside `org-capture', which is
+what would normally do this. TIME is visible to a %(sexp) as
+`+org-template-time', so the same template renders correctly for any date."
+  (let ((+org-template-time (or time (current-time))))
+    (let ((s (with-temp-buffer
+               (insert str)
+               (goto-char (point-min))
+               (while (search-forward "%(" nil t)
+                 (let ((start (- (point) 2))
+                       (sexp-start (1- (point))))
+                   (goto-char sexp-start)
+                   (forward-sexp)
+                   (let ((value (eval (car (read-from-string
+                                            (buffer-substring sexp-start (point))))
+                                      t)))
+                     (delete-region start (point))
+                     (insert (format "%s" value)))))
+               (buffer-string))))
+      (setq s (replace-regexp-in-string
+               "%<\\([^>]*\\)>"
+               (lambda (m) (format-time-string (match-string 1 m) +org-template-time))
+               s t t))
+      (replace-regexp-in-string
+       "%U" (format-time-string "[%Y-%m-%d %a %H:%M]" +org-template-time) s t t))))
 
 ;; Read at load time, so it must be set before org-roam loads. The whole tree is
 ;; the graph, which is what lets a log entry link to [[Someone]] and show up as a
@@ -231,39 +238,31 @@ the targets stay current as collections are added."
         org-log-reschedule               'time
         org-log-into-drawer              t
         org-archive-location             (concat +org-archive-dir "%s::datetree/")
-        ;; Collections and the current file only. No projects.org to refile
+        ;; Within the current file only. There is no projects.org to refile
         ;; into — that road leads back to GTD.
-        org-refile-targets               '((+org-collection-files :maxlevel . 2)
-                                           (nil :maxlevel . 2))
+        org-refile-targets               '((nil :maxlevel . 2))
         org-refile-use-outline-path      'file
         org-outline-path-complete-in-steps nil
         org-refile-allow-creating-parent-nodes 'confirm)
 
-  ;; Signifiers: TODO = open, DONE = done, FWD = migrated, DROP = struck out.
-  ;; Events and notes are not TODOs — an event is a heading with an active
-  ;; timestamp and an :event: tag, a note is a bare heading.
+  ;; Tasks live inside the day they were written, as ordinary headings. CANCELLED
+  ;; exists because org-gcal needs a keyword to mark a deleted event with; see
+  ;; `org-gcal-cancelled-todo-keyword' below.
   ;;
-  ;; `!' (timestamp) not `@' (note): a note prompt makes `B t' bulk migration
-  ;; unusable, since org cannot cope with simultaneous prompts.
+  ;; `!' (timestamp) not `@' (note): a note prompt blocks bulk agenda actions,
+  ;; since org cannot cope with simultaneous prompts.
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "|" "DONE(d!)" "FWD(f!)" "DROP(x!)")))
+        '((sequence "TODO(t)" "|" "DONE(d!)" "CANCELLED(x!)")))
 
   (setq org-todo-keyword-faces
-        '(("FWD"  . +org-todo-onhold)
-          ("DROP" . +org-todo-cancel)))
+        '(("CANCELLED" . +org-todo-cancel)))
 
   ;; A = today, B = default, C = when it happens.
   (setq org-priority-default ?B
         org-priority-lowest  ?C)
 
   (setq org-enforce-todo-dependencies t
-        org-enforce-todo-checkbox-dependencies t)
-
-  ;; Required explicitly rather than relying on org-super-agenda pulling it in.
-  ;; Doom sizes the consistency graph on `org-agenda-mode-hook'.
-  (require 'org-habit)
-  (setq org-habit-show-habits-only-for-today t
-        org-habit-show-all-today nil))
+        org-enforce-todo-checkbox-dependencies t))
 
 ;;; ─── Journal — files ────────────────────────────────────────────────────────
 
@@ -274,19 +273,29 @@ the targets stay current as collections are added."
 (when (modulep! :editor file-templates)
   (set-file-template! "/org/journal/.*\\.org\\'" :ignore t))
 
-(defvar +bujo-agenda-days 90
+(defvar +journal-agenda-days 90
   "How far back the agenda reaches into the journal.
-An entry not migrated in three months is a diary line, not a task.")
+Also what keeps it from scanning every file ever written.")
 
-(defun +bujo-daily-file (&optional time)
+(defun +journal-pretty-date (&optional time)
+  "Return TIME as \"June 15th, 2026\" — the vault's daily-note title format.
+Called from templates as %(+journal-pretty-date); with no argument it uses
+`+org-template-time', which `+org-template-expand-time' binds, so the title is
+right for a day other than today."
+  (let* ((time (or time +org-template-time (current-time)))
+         (day  (string-to-number (format-time-string "%d" time)))
+         (suffix (cond ((memq day '(11 12 13)) "th")
+                       ((= 1 (mod day 10)) "st")
+                       ((= 2 (mod day 10)) "nd")
+                       ((= 3 (mod day 10)) "rd")
+                       (t "th"))))
+    (format-time-string (format "%%B %d%s, %%Y" day suffix) time)))
+
+(defun +journal-daily-file (&optional time)
   "Absolute path of the daily log for TIME (default today)."
   (expand-file-name (format-time-string "%Y-%m-%d.org" time) +org-journal-dir))
 
-(defun +bujo-weekly-file (&optional time)
-  "Absolute path of the weekly review for TIME's ISO week."
-  (expand-file-name (format-time-string "%G-W%V.org" time) +org-journal-dir))
-
-(defun +bujo--file-date (file)
+(defun +journal--file-date (file)
   "Parse a YYYY-MM-DD daily FILE name into a time value, or nil."
   (let ((base (file-name-base file)))
     (when (string-match "\\`\\([0-9]\\{4\\}\\)-\\([0-9]\\{2\\}\\)-\\([0-9]\\{2\\}\\)\\'" base)
@@ -296,7 +305,7 @@ An entry not migrated in three months is a diary line, not a task.")
                          (string-to-number (match-string 1 base))
                          nil -1 nil)))))
 
-(defun +bujo--day-offset (time n)
+(defun +journal--day-offset (time n)
   "Return TIME shifted by N days.
 Via `encode-time' rather than 86400-second arithmetic, which breaks on DST."
   (let ((d (decode-time time)))
@@ -304,7 +313,7 @@ Via `encode-time' rather than 86400-second arithmetic, which breaks on DST."
                        (+ (nth 3 d) n) (nth 4 d) (nth 5 d)
                        nil -1 nil))))
 
-(defun +bujo--iso-week-monday (week)
+(defun +journal--iso-week-monday (week)
   "Return the time value for the Monday of WEEK, a \"YYYY-Www\" string.
 ISO 8601 anchors week 1 on the week containing January 4th."
   (unless (string-match "\\`\\([0-9]\\{4\\}\\)-W\\([0-9]\\{1,2\\}\\)\\'" week)
@@ -316,7 +325,15 @@ ISO 8601 anchors week 1 on the week containing January 4th."
     ;; `encode-time' normalises an out-of-range day, so no month arithmetic.
     (encode-time (list 0 0 12 (+ (- 4 dow) 1 (* 7 (1- n))) 1 year nil -1 nil))))
 
-(defun +bujo--ensure-file (file template &optional time)
+(defun +journal--daily-files ()
+  "Every daily log on disk, oldest first."
+  (sort (cl-remove-if-not
+         #'+journal--file-date
+         (and (file-directory-p +org-journal-dir)
+              (directory-files +org-journal-dir t +org-file-regexp)))
+        #'string<))
+
+(defun +journal--ensure-file (file template &optional time)
   "Return FILE's buffer, creating it from TEMPLATE (expanded as of TIME) if new.
 The file-level :ID: is what makes this an org-roam node with backlinks, rather
 than merely an indexed file."
@@ -332,39 +349,69 @@ than merely an indexed file."
         (save-buffer)))
     buf))
 
-(defun +bujo--goto-log ()
-  "Move point to the `* Log' heading, or to end of buffer if there is none."
+(defun +journal--goto-notes-heading ()
+  "Move point onto the `* Notes' heading line. Return non-nil if it was found.
+Falls back to end of buffer."
   (goto-char (point-min))
-  (unless (re-search-forward "^\\* Log[ \t]*$" nil t)
-    (goto-char (point-max))))
+  (or (re-search-forward "^\\* Notes[ \t]*$" nil t)
+      (ignore (goto-char (point-max)))))
 
-(defun +bujo/goto-day (&optional time)
+(defun +journal--goto-notes ()
+  "Move point under the `* Notes' heading, ready to type.
+Lands on the blank line *below* the heading, not at its end — otherwise typing
+straight after `SPC n j j' appends to the heading text instead of the body.
+`+journal-capture-target' deliberately does NOT use this: org-capture files an
+entry as a child only when point is on the heading itself, and as a top-level
+entry at end of file otherwise."
+  (when (+journal--goto-notes-heading)
+    (forward-line 1)
+    ;; Guard the one case the template does not cover: a `* Notes' heading
+    ;; immediately followed by the next heading or by EOF.
+    (when (or (eobp) (org-at-heading-p))
+      (save-excursion (insert "\n")))
+    (goto-char (line-beginning-position))))
+
+(defun +journal/goto-day (&optional time)
   "Open the daily log for TIME, creating it if needed. Defaults to today."
   (interactive)
   (switch-to-buffer
-   (+bujo--ensure-file (+bujo-daily-file time) "journal/daily-head.org" time))
-  (+bujo--goto-log))
+   (+journal--ensure-file (+journal-daily-file time) "journal/daily-head.org" time))
+  (+journal--goto-notes))
 
-(defun +bujo/today ()     (interactive) (+bujo/goto-day))
-(defun +bujo/yesterday () (interactive) (+bujo/goto-day (+bujo--day-offset (current-time) -1)))
-(defun +bujo/tomorrow ()  (interactive) (+bujo/goto-day (+bujo--day-offset (current-time)  1)))
+(defun +journal/today ()     (interactive) (+journal/goto-day))
+(defun +journal/yesterday () (interactive) (+journal/goto-day (+journal--day-offset (current-time) -1)))
+(defun +journal/tomorrow ()  (interactive) (+journal/goto-day (+journal--day-offset (current-time)  1)))
 
-(defun +bujo/goto-date (date)
+(defun +journal/goto-date (date)
   "Open the daily log for DATE, prompting with the org date picker."
   (interactive (list (org-read-date nil t)))
-  (+bujo/goto-day date))
+  (+journal/goto-day date))
 
-(defun +bujo/goto-week (&optional time)
-  "Open the weekly review for TIME's ISO week, creating it if needed."
+(defun +journal--adjacent (n)
+  "Return the daily log N positions from the current one on disk, or nil.
+Walks existing files rather than the calendar, so it skips days you did not
+write — the job the vault's yesterday/tomorrow link line did by hand."
+  (let* ((files (+journal--daily-files))
+         (base  (and buffer-file-name (file-name-base buffer-file-name)))
+         (idx   (and base (cl-position base files
+                                       :key #'file-name-base :test #'string=))))
+    (unless idx (user-error "Not visiting a daily log"))
+    (let ((target (+ idx n)))
+      (and (>= target 0) (< target (length files)) (nth target files)))))
+
+(defun +journal/previous-day ()
+  "Open the previous daily log that exists."
   (interactive)
-  (switch-to-buffer
-   (+bujo--ensure-file (+bujo-weekly-file time) "journal/weekly-head.org" time))
-  (org-update-all-dblocks))
+  (if-let* ((f (+journal--adjacent -1))) (find-file f)
+    (user-error "No earlier log")))
 
-(defun +bujo/this-week () (interactive) (+bujo/goto-week))
-(defun +bujo/last-week () (interactive) (+bujo/goto-week (+bujo--day-offset (current-time) -7)))
+(defun +journal/next-day ()
+  "Open the next daily log that exists."
+  (interactive)
+  (if-let* ((f (+journal--adjacent 1))) (find-file f)
+    (user-error "No later log")))
 
-(defun +bujo/browse ()
+(defun +journal/browse ()
   "Open the journal directory."
   (interactive)
   (make-directory +org-journal-dir t)
@@ -372,11 +419,11 @@ than merely an indexed file."
 
 ;;; ─── Journal — capture ──────────────────────────────────────────────────────
 
-(defun +bujo-capture-target ()
-  "org-capture target: under `* Log' in today's daily.
+(defun +journal-capture-target ()
+  "org-capture target: under `* Notes' in today's daily.
 Does not call `org-roam-dailies--capture' — nesting a capture inside a capture
 hangs."
-  (let ((file (+bujo-daily-file))
+  (let ((file (+journal-daily-file))
         (+file-templates-inhibit t))
     (make-directory +org-journal-dir t)
     (set-buffer (org-capture-target-buffer file))
@@ -387,172 +434,96 @@ hangs."
                (+org-template-string "journal/daily-head.org")))
       (goto-char (point-min))
       (org-id-get-create))
-    (+bujo--goto-log)))
-
-;; Global capture frame, opened by bin/org-capture (alt-c in aerospace.toml).
-;; An explicit `title' parameter is what lets the window manager float it:
-;; `+org-capture/open-frame' binds `frame-title-format' to "", and a frame
-;; parameter overrides that.
-(after! org
-  (setf (alist-get 'title  +org-capture-frame-parameters) "org-capture"
-        (alist-get 'width  +org-capture-frame-parameters) 90
-        (alist-get 'height +org-capture-frame-parameters) 20
-        ;; `default-frame-alist' maximises every new frame; a capture popup is
-        ;; the one place that is wrong.
-        (alist-get 'fullscreen +org-capture-frame-parameters) nil)
-  ;; Doom sets `window-system' here only on Linux. Without it a daemon with no
-  ;; GUI frame open builds a tty frame instead and dies with "Unknown terminal
-  ;; type" — which is exactly the state the machine is in after closing the last
-  ;; window.
-  (when (featurep :system 'macos)
-    (setf (alist-get 'window-system +org-capture-frame-parameters) 'ns)))
+    ;; On the heading, not under it — see `+journal--goto-notes'.
+    (+journal--goto-notes-heading)))
 
 (after! org
-  ;; One capture target for everything but habits: no filing decision at
-  ;; capture time.
+  ;; One target, no filing decision at capture time: today's log.
   (setq org-capture-templates
-        `(("t" "Task"    entry (function +bujo-capture-target)
-           ,(+org-template "capture/task.org")    :empty-lines 1)
-          ("e" "Event"   entry (function +bujo-capture-target)
-           ,(+org-template "capture/event.org")   :empty-lines 1)
-          ("n" "Note"    entry (function +bujo-capture-target)
-           ,(+org-template "capture/note.org")    :empty-lines 1)
-          ("m" "Meeting" entry (function +bujo-capture-target)
-           ,(+org-template "capture/meeting.org") :empty-lines 1)
-          ("h" "Habit"   entry (file+headline ,+org-habits-file "Habits")
-           ,(+org-template "capture/habit.org")   :empty-lines 1))))
+        `(("t" "Task" entry (function +journal-capture-target)
+           ,(+org-template "capture/task.org") :empty-lines 1)
+          ("n" "Note" entry (function +journal-capture-target)
+           ,(+org-template "capture/note.org") :empty-lines 1))))
 
-;;; ─── Journal — metrics ──────────────────────────────────────────────────────
+;;; ─── Journal — week review ──────────────────────────────────────────────────
 
-;; A dynamic block, org's answer to the vault's dataviewjs chart.
+;; The vault's weekly note was worth keeping only because dataview filled it in.
+;; Without a query engine a weekly *file* is seven links to maintain by hand, so
+;; there isn't one: the week is generated on demand into a scratch buffer and
+;; thrown away. org-transclusion pulls each day's `* Notes' in live, so nothing
+;; is ever duplicated on disk and nothing can go stale.
 
-(defvar +bujo-metrics
-  '(("ENERGY"  . "Energy")
-    ("MOOD"    . "Mood")
-    ("SLEEP"   . "Sleep")
-    ("WEIGHT"  . "Weight")
-    ("READING" . "Read"))
-  "Daily file-level properties collected into the weekly table.
-Each entry is (PROPERTY . COLUMN-HEADING).")
+(defun +journal--week-buffer-name (week)
+  (format "*week %s*" week))
 
-(defun +bujo--numeric (s)
-  "Return S as a number when it looks like one, else nil."
-  (and (stringp s)
-       (let ((s (string-trim s)))
-         (and (string-match-p "\\`[0-9]+\\(\\.[0-9]+\\)?\\'" s)
-              (string-to-number s)))))
+(defun +journal/goto-week (&optional time)
+  "Build a review buffer for TIME's ISO week (default this week)."
+  (interactive)
+  (require 'org-transclusion)
+  (let* ((week   (format-time-string "%G-W%V" time))
+         (monday (+journal--iso-week-monday week))
+         (buf    (get-buffer-create (+journal--week-buffer-name week))))
+    (with-current-buffer buf
+      (when (bound-and-true-p org-transclusion-mode)
+        (org-transclusion-remove-all))
+      (erase-buffer)
+      (unless (derived-mode-p 'org-mode) (org-mode))
+      ;; Absolute links throughout, but org-transclusion resolves relative to
+      ;; `default-directory' in a buffer with no file.
+      (setq default-directory +org-journal-dir)
+      (insert "#+title: " week "\n#+startup: showall\n\n")
+      (let ((found nil))
+        (dotimes (i 7)
+          (let* ((day  (+journal--day-offset monday i))
+                 (file (+journal-daily-file day)))
+            (when (file-readable-p file)
+              (setq found t)
+              (insert (format "* %s  [[file:%s][%s]]\n"
+                              (format-time-string "%a %-d %b" day)
+                              file (file-name-base file)))
+              ;; No :only-contents — it strips the day's sub-headings while
+              ;; keeping their SCHEDULED lines, so tasks vanish from the review.
+              (insert (format "#+transclude: [[file:%s::*Notes]] :level 2\n\n"
+                              file)))))
+        (unless found
+          (insert "No daily logs this week.\n")))
+      (goto-char (point-min))
+      (org-transclusion-add-all))
+    (switch-to-buffer buf)))
 
-(defun +bujo--daily-properties (file)
-  "Return an alist of FILE's file-level `+bujo-metrics' properties."
-  (with-temp-buffer
-    (delay-mode-hooks (org-mode))
-    (insert-file-contents file)
-    (mapcar (lambda (cell)
-              (cons (car cell) (org-entry-get (point-min) (car cell))))
-            +bujo-metrics)))
-
-(defun +bujo--count-open (file)
-  "Count open TODO headings in FILE."
-  (with-temp-buffer
-    (insert-file-contents file)
-    (how-many "^\\*+ TODO " (point-min) (point-max))))
-
-(defun org-dblock-write:bujo-metrics (params)
-  "Write the week's daily logs and their metrics as an org table.
-PARAMS may carry :week \"YYYY-Www\"; otherwise the buffer's :WEEK: property,
-then the current week."
-  (let* ((week   (or (plist-get params :week)
-                     (org-entry-get (point-min) "WEEK")
-                     (format-time-string "%G-W%V")))
-         (monday (+bujo--iso-week-monday week))
-         (keys   (mapcar #'car +bujo-metrics))
-         (sums   (make-vector (length keys) 0))
-         (counts (make-vector (length keys) 0))
-         (open-total 0)
-         (rows   '()))
-    (dotimes (i 7)
-      (let* ((time   (+bujo--day-offset monday i))
-             (file   (+bujo-daily-file time))
-             (exists (file-readable-p file))
-             (props  (and exists (+bujo--daily-properties file)))
-             (open   (if exists (+bujo--count-open file) 0))
-             (cells  '()))
-        (cl-incf open-total open)
-        (dotimes (n (length keys))
-          (let* ((raw (cdr (assoc (nth n keys) props)))
-                 (num (+bujo--numeric raw)))
-            (when num
-              (cl-incf (aref sums n) num)
-              (cl-incf (aref counts n) 1))
-            (push (or raw "") cells)))
-        (push (append
-               (list (if exists
-                         (format "[[file:%s][%s]]"
-                                 (file-name-nondirectory file)
-                                 (format-time-string "%a %d" time))
-                       (format-time-string "%a %d" time)))
-               (nreverse cells)
-               (list (if (> open 0) (number-to-string open) "")))
-              rows)))
-    (insert "| Day | " (mapconcat #'cdr +bujo-metrics " | ") " | Open |\n|-\n")
-    (dolist (row (nreverse rows))
-      (insert "| " (mapconcat #'identity row " | ") " |\n"))
-    (insert "|-\n| Avg | "
-            (mapconcat
-             (lambda (n)
-               (if (> (aref counts n) 0)
-                   (format "%.1f" (/ (aref sums n) (float (aref counts n))))
-                 ""))
-             (number-sequence 0 (1- (length keys)))
-             " | ")
-            " | " (number-to-string open-total) " |")
-    (org-table-align)))
+(defun +journal/this-week () (interactive) (+journal/goto-week))
+(defun +journal/last-week () (interactive) (+journal/goto-week (+journal--day-offset (current-time) -7)))
 
 ;;; ─── Org — agenda ───────────────────────────────────────────────────────────
 
-(defun +bujo-agenda-files ()
-  "Agenda scope: recent dailies, every collection, and the calendar.
-Bounding this by `+bujo-agenda-days' also keeps the agenda from scanning every
-file ever written."
-  (let ((cutoff (float-time (+bujo--day-offset (current-time)
-                                               (- +bujo-agenda-days)))))
+(defun +journal-agenda-files ()
+  "Agenda scope: recent dailies plus the calendar."
+  (let ((cutoff (float-time (+journal--day-offset (current-time)
+                                                  (- +journal-agenda-days)))))
     (append
      (cl-remove-if
-      (lambda (f)
-        (let ((date (+bujo--file-date f)))
-          ;; Undated files (the weeklies) are always kept.
-          (and date (< (float-time date) cutoff))))
-      (and (file-directory-p +org-journal-dir)
-           (directory-files +org-journal-dir t +org-file-regexp)))
-     (+org-collection-files)
+      (lambda (f) (< (float-time (+journal--file-date f)) cutoff))
+      (+journal--daily-files))
      (and (file-readable-p +org-calendar-file) (list +org-calendar-file)))))
 
-(defun +bujo-past-daily-files ()
-  "Daily logs strictly before today — the migration pool."
-  (let ((today (format-time-string "%Y-%m-%d")))
-    (cl-remove-if-not
-     (lambda (f) (and (+bujo--file-date f)
-                      (string< (file-name-base f) today)))
-     (+bujo-agenda-files))))
-
-(defun +bujo-refresh-agenda-files (&rest _)
+(defun +journal-refresh-agenda-files (&rest _)
   "Recompute `org-agenda-files'. The set changes every midnight."
-  (setq org-agenda-files (+bujo-agenda-files)))
+  (setq org-agenda-files (+journal-agenda-files)))
 
-(advice-add 'org-agenda :before #'+bujo-refresh-agenda-files)
+(advice-add 'org-agenda :before #'+journal-refresh-agenda-files)
 ;; `g' in the agenda calls `org-agenda-redo', which does not route through
 ;; `org-agenda' — without this, a session left open past midnight would keep
 ;; using yesterday's file list. `org-agenda-redo-all' delegates to it.
-(advice-add 'org-agenda-redo :before #'+bujo-refresh-agenda-files)
+(advice-add 'org-agenda-redo :before #'+journal-refresh-agenda-files)
 
 (after! org-agenda
-  (+bujo-refresh-agenda-files)
+  (+journal-refresh-agenda-files)
   (setq org-agenda-span              'week
         org-agenda-start-on-weekday  1
         ;; Doom defaults this to "-3d", shifting every block three days into the
         ;; past. nil starts today; weekly views still snap to Monday.
         org-agenda-start-day         nil
-        org-agenda-start-with-log-mode '(closed clock)
+        org-agenda-start-with-log-mode '(closed)
         org-agenda-skip-scheduled-if-done t
         org-agenda-skip-deadline-if-done  t
         org-agenda-skip-scheduled-if-deadline-is-shown t
@@ -561,60 +532,12 @@ file ever written."
         org-agenda-compact-blocks    nil
         org-agenda-block-separator   ?─
         org-deadline-warning-days    14
-        ;; Marks survive a bulk action, so one migration pass can reschedule,
-        ;; retag and archive without re-marking.
-        org-agenda-bulk-persistent-marks t
         org-agenda-time-grid
         '((daily today require-timed)
           (800 1000 1200 1400 1600 1800 2000)
           " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
         org-agenda-current-time-string
-        "◀ ─────────────────────────────────── now")
-
-  ;; Values here are `eval'd when the view is built, so the file lists stay
-  ;; current rather than freezing at load time.
-  (setq org-agenda-custom-commands
-        '(("d" "Today"
-           ((agenda "" ((org-agenda-span 'day)
-                        (org-agenda-overriding-header "Today")
-                        (org-super-agenda-groups
-                         '((:name "Overdue"  :deadline past :scheduled past :order 1)
-                           (:name "Due"      :deadline today :order 2)
-                           (:name "Habits"   :habit t        :order 3)
-                           (:name "Schedule" :time-grid t    :order 4)))))
-            (todo "TODO" ((org-agenda-overriding-header "Open in today's log")
-                          (org-agenda-files (list (+bujo-daily-file)))))))
-
-          ("m" "Migration"
-           ((todo "TODO"
-                  ((org-agenda-overriding-header
-                    "Open tasks in past logs — m to mark, then B s (reschedule) · B S (scatter) · B r (refile) · B t (state) · B $ (archive)")
-                   (org-agenda-files (+bujo-past-daily-files))
-                   (org-super-agenda-groups
-                    '((:name "Unscheduled" :scheduled nil  :order 1)
-                      (:name "This week"   :scheduled past :order 2)))))))
-
-          ("w" "This week"
-           ((agenda "" ((org-agenda-span 'week)
-                        (org-agenda-overriding-header ""))))))))
-
-(use-package! org-super-agenda
-  :after org-agenda
-  :config
-  ;; Its header keymap otherwise shadows evil motions in the agenda.
-  (setq org-super-agenda-header-map (make-sparse-keymap))
-  (org-super-agenda-mode +1))
-
-;;; ─── Org — clock ────────────────────────────────────────────────────────────
-
-(after! org-clock
-  (setq org-clock-persist              'history
-        org-clock-in-resume            t
-        org-clock-out-remove-zero-time-clocks t
-        org-clock-out-when-done        t
-        org-clock-report-include-clocking-task t
-        org-clock-history-length       20)
-  (org-clock-persistence-insinuate))
+        "◀ ─────────────────────────────────── now"))
 
 ;;; ─── Org — roam ─────────────────────────────────────────────────────────────
 
@@ -630,35 +553,32 @@ file ever written."
         org-roam-file-exclude-regexp
         '("\\`archive/" "\\`\\.attach/" "\\`calendar\\.org\\'"))
 
-  ;; Mirrors the Obsidian vault's schema so the two stay legible to each other:
-  ;; type/topic/status/created as file-level properties, which org-roam indexes
-  ;; into its DB (unlike #+keywords).
+  ;; Mirrors the Obsidian vault: a flat notes/ directory, sentence-case filenames
+  ;; with spaces, and type/topic/status/created as file-level properties, which
+  ;; org-roam indexes into its DB (unlike #+keywords).
   (setq org-roam-capture-templates
-        `(("d" "atomic" plain ,(+org-template "roam/atomic.org")
-           :target (file+head "notes/${slug}.org" ,(+org-template-head "roam/atomic-head.org"))
+        `(("a" "atomic" plain ,(+org-template "roam/atomic.org")
+           :target (file+head "notes/${title}.org" ,(+org-template-head "roam/atomic-head.org"))
            :unnarrowed t :empty-lines-before 1)
           ("m" "map of content" plain ,(+org-template "roam/moc.org")
-           :target (file+head "notes/${slug}.org" ,(+org-template-head "roam/moc-head.org"))
+           :target (file+head "notes/${title}.org" ,(+org-template-head "roam/moc-head.org"))
            :unnarrowed t :empty-lines-before 1)
           ("p" "person" plain ,(+org-template "roam/person.org")
-           :target (file+head "notes/people/${slug}.org" ,(+org-template-head "roam/person-head.org"))
-           :unnarrowed t :empty-lines-before 1)
-          ("r" "reference" plain ,(+org-template "roam/reference.org")
-           :target (file+head "notes/ref/${slug}.org" ,(+org-template-head "roam/reference-head.org"))
+           :target (file+head "notes/${title}.org" ,(+org-template-head "roam/person-head.org"))
            :unnarrowed t :empty-lines-before 1)))
 
   ;; Same head as `SPC X' and the journal commands, so all three entry points
   ;; produce identical files.
   (setq org-roam-dailies-capture-templates
-        `(("d" "log entry" entry ,(+org-template "capture/note.org")
+        `(("d" "note" entry ,(+org-template "capture/note.org")
            :target (file+head+olp "%<%Y-%m-%d>.org"
                                   ,(+org-template-head "journal/daily-head.org")
-                                  ("Log"))
+                                  ("Notes"))
            :empty-lines 1)
           ("t" "task" entry ,(+org-template "capture/task.org")
            :target (file+head+olp "%<%Y-%m-%d>.org"
                                   ,(+org-template-head "journal/daily-head.org")
-                                  ("Log"))
+                                  ("Notes"))
            :empty-lines 1))))
 
 (use-package! consult-org-roam
@@ -706,7 +626,7 @@ Returns non-nil when both were found."
         org-gcal-recurring-events-mode 'nested
         org-gcal-remove-api-cancelled-events t
         org-gcal-update-cancelled-events-with-todo t
-        org-gcal-cancelled-todo-keyword "DROP"
+        org-gcal-cancelled-todo-keyword "CANCELLED"
         org-gcal-notify-p nil
         org-gcal-up-days   30
         org-gcal-down-days 180

@@ -5,5 +5,5 @@ This map organises concepts related to *${title}* -- %^{Scope, one line}.
 * Landscape
 %?
 
-# A MoC is pure navigation. Prefer a hub atomic note for a focused topic; use
-# this only when a domain has many top-level notes and no single hub fits.
+# Nothing to maintain here: every note whose :TOPIC: links to this one shows up
+# in the backlink buffer, live. SPC n r b.

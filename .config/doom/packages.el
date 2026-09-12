@@ -6,13 +6,13 @@
   :recipe (:host github :repo "konrad1977/oxocarbon-emacs"))
 
 
-;; Org / agenda / roam extras.
+;; Org / roam extras.
 ;; NOTE: org-modern and org-appear are already pulled (and pinned) by the
 ;; `+pretty' flag on `:lang org' — don't redeclare them here, an unpinned
 ;; redeclaration only loses Doom's pin.
-(package! org-super-agenda)  ; grouped, categorized agenda views
 (package! org-roam-ui)       ; web-based graph view for org-roam
 (package! consult-org-roam)  ; org-roam search/backlinks via consult
+(package! org-transclusion)  ; live embeds; the weekly review buffer is built of them
 (package! org-gcal)          ; two-way Google Calendar sync
 
 ;; Live preview of org-mode and markdown files (uses xwidgets)
