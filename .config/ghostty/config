@@ -16,9 +16,9 @@ command = "$SHELL" -l -c 'tmux new-session -A -s main'
 
 # -- appearance ----------------------------------------------------------------
 
-font-family = Blex Mono Nerd Font
+font-family = FiraCode Nerd Font
 font-size = 15
-font-feature = -calt, -dlig, -liga
+# font-feature = -calt, -dlig, -liga
 bold-color = bright
 
 palette = 0=#161616
