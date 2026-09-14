@@ -611,15 +611,37 @@ hangs."
 (defvar +gcal-calendar-id user-mail-address
   "Google Calendar id to sync. Override in `local/personal.el'.")
 
+(defun +gcal--security (&rest args)
+  "Run security(1) with ARGS, returning trimmed stdout, or nil on failure."
+  (with-temp-buffer
+    (when (zerop (apply #'call-process "/usr/bin/security" nil t nil args))
+      (let ((out (string-trim (buffer-string))))
+        (unless (string-empty-p out) out)))))
+
 (defun +gcal-load-credentials ()
-  "Load the OAuth client id/secret from `auth-sources'.
-Returns non-nil when both were found."
-  (when-let* ((entry  (car (auth-source-search :host "gcal.googleapis.com" :max 1)))
-              (id     (plist-get entry :user))
-              (secret (plist-get entry :secret)))
+  "Load the OAuth client id/secret from the macOS Keychain.
+The generic-password item's service is `gcal.googleapis.com\=', its account
+field holds the client id and its password the client secret.
+Returns non-nil when both were found.
+
+Shells out to security(1) rather than using `auth-source\=': as of Emacs 31
+the `macos-keychain-generic\=' backend hands its default collection to
+`call-process\=' as a symbol and dies with a `wrong-type-argument\=', and it
+maps :host onto the item\='s creator field rather than its service."
+  (when-let* ((attrs  (+gcal--security "find-generic-password"
+                                       "-s" "gcal.googleapis.com"))
+              (id     (and (string-match "^ *\"acct\"<blob>=\"\\(.*\\)\"$" attrs)
+                           (match-string 1 attrs)))
+              (secret (+gcal--security "find-generic-password"
+                                       "-s" "gcal.googleapis.com" "-w")))
     (setq org-gcal-client-id id
-          org-gcal-client-secret (if (functionp secret) (funcall secret) secret))
+          org-gcal-client-secret secret)
     t))
+
+;; Must run before org-gcal loads: the package registers its oauth2-auto
+;; provider at load time from these two variables, and warns if they are still
+;; unset then. `after!' would be too late.
+(+gcal-load-credentials)
 
 (after! org-gcal
   (setq org-gcal-fetch-file-alist `((,+gcal-calendar-id . ,+org-calendar-file))
@@ -632,15 +654,21 @@ Returns non-nil when both were found."
         org-gcal-down-days 180
         org-gcal-strip-html-descriptions t
         ;; Otherwise every sync re-prompts for the plstore passphrase.
-        plstore-cache-passphrase-for-symmetric-encryption t)
-  (+gcal-load-credentials))
+        plstore-cache-passphrase-for-symmetric-encryption t
+        ;; Homebrew ships only the curses/tty pinentry, which a GUI Emacs
+        ;; cannot drive; read the plstore passphrase in the minibuffer instead.
+        epg-pinentry-mode 'loopback)
+  ;; Idempotent, and picks up credentials that weren't readable at startup.
+  (when (+gcal-load-credentials)
+    (org-gcal-reload-client-id-secret)))
 
 (defun +gcal/sync ()
   "Two-way sync with Google Calendar, if credentials are configured."
   (interactive)
   (require 'org-gcal)
   (if (+gcal-load-credentials)
-      (org-gcal-sync)
+      (progn (org-gcal-reload-client-id-secret)
+             (org-gcal-sync))
     (message "org-gcal: no credentials in the keychain — see config.el for setup")))
 
 ;; Inert until credentials exist, so this is a no-op on a fresh machine.
