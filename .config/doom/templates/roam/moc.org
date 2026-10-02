@@ -1,9 +1,0 @@
-#+begin_quote
-This map organises concepts related to *${title}* -- %^{Scope, one line}.
-#+end_quote
-
-* Landscape
-%?
-
-# Nothing to maintain here: every note whose :TOPIC: links to this one shows up
-# in the backlink buffer, live. SPC n r b.
