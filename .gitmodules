@@ -2,4 +2,4 @@
     branch = main
     path = .config/nvim
     update = rebase
-	url = git@github.com:djamseed/nvim.git
+	url = https://github.com/djamseed/nvim.git

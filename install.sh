@@ -46,7 +46,6 @@ XDG_STATE_HOME="$HOME/.local/state"
 # Create required directories
 echo "Creating required directory tree..."
 mkdir -p "$XDG_CACHE_HOME"/{tlrc,zsh}
-mkdir -p "$XDG_CONFIG_HOME"/git/local
 mkdir -p "$XDG_DATA_HOME"/{dotnet,go,tmux,zoxide}
 mkdir -p "$XDG_STATE_HOME"/{less,zsh}
 echo '...done'
@@ -61,17 +60,23 @@ brew bundle
 ln -sfn "$PWD/.zshenv" "$HOME/.zshenv"
 ln -sfn "$PWD/.hushlogin" "$HOME/.hushlogin"
 
-# Create symlinks from the .config folder to ~/.config
+# Create symlinks from the .config folder to ~/.config (including dotfiles like .curlrc)
+mkdir -p "$XDG_CONFIG_HOME"
+shopt -s dotglob
 for file in "$PWD"/.config/*; do
     f=$(basename "$file")
-    ln -sfn "$PWD/.config/$f" "$HOME/.config/$f"
+    ln -sfn "$PWD/.config/$f" "$XDG_CONFIG_HOME/$f"
 done
+shopt -u dotglob
+
+# Machine-local git identity (see README)
+mkdir -p "$XDG_CONFIG_HOME"/git/local
 
 # Set macOS preferences (sane defaults)
 source macos.sh
 
 printf '\u2728\e[1;33m Installation completed! \u2728 \e[m\n'
-read -r -p '?Press any key to reboot your computer...: '
+read -r -p 'Press enter to reboot your computer...'
 
 # Restart to make the settings effective
 sudo reboot
