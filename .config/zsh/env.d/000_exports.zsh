@@ -1,7 +1,6 @@
 # Locale
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-export LC_CTYPE=en_US.UTF-8
 
 # Better experience for `less`
 #    -F: Exit if contents fit on one screen.
@@ -20,12 +19,17 @@ export LESS='-F -Q -M -R -X -i -g -s -x4 -z-2'
 export PAGER=less
 
 # Use `bat` as the default pager for man pages
-(($+commands[bat])) && export MANPAGER='col -bx | bat -l man -p' || export MANPAGER=less
+if (($+commands[bat])); then
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    export MANROFFOPT=-c
+else
+    export MANPAGER=less
+fi
 
 # Ensure Homebrew-installed binaries for curl take precedence
-if (($+commands[brew])); then
-    LIBCURL_CFLAGS="-L$HOMEBREW_PREFIX/opt/curl/lib"
-    LIBCURL_LIBS="-I$HOMEBREW_PREFIX/opt/curl/include"
+if [[ -n $HOMEBREW_PREFIX ]]; then
+    LIBCURL_CFLAGS="-I$HOMEBREW_PREFIX/opt/curl/include"
+    LIBCURL_LIBS="-L$HOMEBREW_PREFIX/opt/curl/lib"
     export LIBCURL_CFLAGS LIBCURL_LIBS
 fi
 
@@ -42,7 +46,6 @@ export LESSHISTFILE=$XDG_STATE_HOME/less/history
 export MISE_CACHE_DIR=$XDG_CACHE_HOME/mise
 export MISE_CONFIG_DIR=$XDG_CONFIG_HOME/mise
 export MISE_DATA_DIR=$XDG_DATA_HOME/mise
-export NPM_CONFIG_CACHE=$XDG_CACHE_HOME/npm
 export NPM_CONFIG_CACHE=$XDG_CACHE_HOME/npm
 export NPM_CONFIG_INIT_MODULE=$XDG_CONFIG_HOME/npm/config/npm-init.js
 export NUGET_HTTP_CACHE_PATH=$XDG_CACHE_HOME/NuGet/http-cache

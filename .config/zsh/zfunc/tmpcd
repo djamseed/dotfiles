@@ -9,4 +9,4 @@ else
     dir=$(mktemp -d -t "${1}.XXXXXXXXXX")
 fi
 
-cd "$dir" || exit
+cd "$dir"

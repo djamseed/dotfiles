@@ -30,7 +30,6 @@ alias zap='rm -i'
 
     # View HTTP traffic
     alias httpdump='sudo tcpdump -i en0 -n -s 0 -w - | rg -a -o -P "Host: .*|GET /.*"'
-    alias sniff='sudo rg -i -t "^(GET|POST) " -d en1 "tcp and port 80"'
 }
 (($+commands[btop])) && alias top=btop
 (($+commands[nvim])) && {
@@ -47,7 +46,7 @@ alias lsock='sudo lsof -i -P'                                                   
 (($+commands[rg])) && alias lsockT='sudo lsof -nP | rg TCP'                                  # lsockT:       Display only open TCP sockets
 (($+commands[rg])) && alias lsockU='sudo lsof -nP | rg UDP'                                  # lsockU:       Display only open UDP sockets
 alias netCons='lsof -i'                                                                      # netCons:      Show all open TCP/IP sockets
-alias nic="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"                 # nic:          Show active network interfaces
+(($+commands[rg])) && alias nic="ifconfig | rg -U -o '^[^\t:]+:([^\n]|\n\t)*status: active'"  # nic:          Show active network interfaces
 alias op='sudo lsof -i -P'                                                                   # op:           List of open ports
 alias pubip='curl -s checkip.dyndns.org | sed -e "s/.*Current IP Address: //" -e "s/<.*$//"' # myip:         Public facing IP Address
 

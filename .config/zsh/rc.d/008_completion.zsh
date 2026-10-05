@@ -6,7 +6,7 @@ zstyle ':completion:*'              verbose             true
 zstyle ':completion:*'              menu                select
 zstyle ':completion:*'              matcher-list        'm:{[:lower:]}={[:upper:]}'
 zstyle ':completion::complete:*'    use-cache           true
-zstyle ':completion::complete:*'    cache-path          $XDG_CACHE_HOME/zsh/compcache
+zstyle ':completion::complete:*'    cache-path          $ZCACHEDIR/compcache
 zstyle ':completion:*:descriptions' format              [%d]
 zstyle ':completion:*:manuals'      separate-sections   true
 
@@ -20,17 +20,19 @@ zmodload zsh/complist
 # - '.' matches "regular files"
 # - 'mh+20' matches files (or directories or whatever) that are older than 20 hours.
 autoload -Uz compinit
-compdump_path="${XDG_CACHE_HOME}/zsh/compdump"
+compdump_path=$ZCACHEDIR/compdump
 
-if [[ -n ${compdump_path}(#qN.mh+20) ]]; then
-    compinit -i -u -d "$compdump_path"
+if [[ ! -s $compdump_path || -n ${compdump_path}(#qN.mh+20) ]]; then
+    compinit -i -d "$compdump_path"
+    touch "$compdump_path"
     {
         autoload -Uz zrecompile
         zrecompile -pq "$compdump_path"
     } &!
 else
-    compinit -i -u -C -d "$compdump_path"
+    compinit -i -C -d "$compdump_path"
 fi
+unset compdump_path
 
 # Use h/j/k/l in menu selection (during completion)
 bindkey -M menuselect 'h' vi-backward-char

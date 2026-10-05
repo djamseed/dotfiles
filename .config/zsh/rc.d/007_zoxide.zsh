@@ -1,3 +1,3 @@
 # Initialize zoxide
 
-(($+commands[zoxide])) && eval "$(zoxide init zsh --cmd cd)"
+_cache_eval zoxide init zsh --cmd cd
