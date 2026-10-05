@@ -39,9 +39,6 @@
 [apply]
 	whitespace = fix # detect whitespace errors when applying a patch
 
-[color]
-	ui = auto # use colors in git commands
-
 [color "branch"]
 	current = yellow reverse
 	local = yellow
@@ -60,10 +57,9 @@
 
 [core]
 	attributesfile = ~/.config/git/attributes
-    editor = nvim
 	excludesfile = ~/.config/git/ignore
     pager = delta # use delta as the pager
-	precomposeunicode = false
+	precomposeunicode = true # avoid unicode filename issues on macOS
 	trustctime = false # make `git rebase` safer on macOS
 	untrackedCache = true # speed up commands involving untracked files
 	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
@@ -115,6 +111,8 @@
     merge-conflict-base-diff-header-style = "#525252"
 
 [diff]
+	algorithm = histogram
+	colorMoved = default
 	renames = copies # detect copies as well as renames
 
 [diff "bin"]
@@ -125,6 +123,9 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+
+[branch]
+    sort = -committerdate
 
 [fetch]
     prune = true
@@ -145,9 +146,20 @@
 [pull]
 	rebase = true
 
+[rebase]
+    autoStash = true
+    updateRefs = true
+
+[rerere]
+    enabled = true
+
 [push]
 	default = simple
 	followTags = true # Make `git push` push relevant annotated tags when pushing branches out.
+	autoSetupRemote = true
+
+[tag]
+    sort = version:refname
 
 # URL shorthands
 [url "git@github.com:"]
@@ -155,7 +167,7 @@
 	pushInsteadOf = "github:"
 	pushInsteadOf = "git://github.com/"
 
-[url "git://github.com/"]
+[url "https://github.com/"]
 	insteadOf = "github:"
 
 [url "git@gist.github.com:"]
@@ -163,8 +175,5 @@
 	pushInsteadOf = "gist:"
 	pushInsteadOf = "git://gist.github.com/"
 
-[url "git://gist.github.com/"]
+[url "https://gist.github.com/"]
 	insteadOf = "gist:"
-
-[maintenance]
-    auto = true

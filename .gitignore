@@ -38,7 +38,7 @@ Temporary Items
 ### Vim ###
 # Swap
 [._]*.s[a-v][a-z]
-!*.svg  # comment out if you don't need vector files
+!*.svg
 [._]*.sw[a-p]
 [._]s[a-rt-v][a-z]
 [._]ss[a-gi-z]
@@ -59,7 +59,6 @@ tags
 # Ignore tmux plugins
 .config/tmux/plugins/**
 
-# Machine-local identity, never committed (see the .example files)
+# Machine-local identity, never committed (see README)
 .config/git/local
-.config/doom/local/personal.el
 # End of https://www.toptal.com/developers/gitignore/api/macos,vim
