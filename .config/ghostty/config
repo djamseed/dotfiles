@@ -4,7 +4,6 @@ desktop-notifications = false
 confirm-close-surface = false
 quit-after-last-window-closed = true
 bell-features = no-system
-shell-integration = zsh
 shell-integration-features = no-cursor, sudo
 link-url = true
 mouse-hide-while-typing = true
